@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.jetbrains.riderflow": "2023.1.0-25",
     "com.kylewbanks.scenerefattribute": "git+https://github.com/KyleBanks/scene-ref-attribute.git",
     "com.unity.addressables": "1.21.14",
     "com.unity.ai.navigation": "1.1.4",
@@ -45,5 +46,14 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "JetBrains",
+      "url": "https://npm.pkg.jetbrains.space/public/p/jetbrains-gamedev/jetbrains-gamedev/",
+      "scopes": [
+        "com.jetbrains"
+      ]
+    }
+  ]
 }
