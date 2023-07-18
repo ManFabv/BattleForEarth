@@ -314,16 +314,16 @@ namespace Unity.FPS.Gameplay
 
                 // calculate a smoothed weapon bob amount based on how close to our max grounded movement velocity we are
                 float characterMovementFactor = 0f;
-                if (m_PlayerCharacterController.IsGrounded)
-                {
-                    characterMovementFactor =
-                        Mathf.Clamp01(playerCharacterVelocity.magnitude /
-                                      (m_PlayerCharacterController.MaxSpeedOnGround *
-                                       m_PlayerCharacterController.SprintSpeedModifier));
-                }
+                //TODO-Reference: only left for future reference
+                //if (m_PlayerCharacterController.IsGrounded)
+                //{
+                //    characterMovementFactor =
+                //        Mathf.Clamp01(playerCharacterVelocity.magnitude /
+                //                      (m_PlayerCharacterController.MaxSpeedOnGround *
+                //                       m_PlayerCharacterController.SprintSpeedModifier));
+                //}
 
-                m_WeaponBobFactor =
-                    Mathf.Lerp(m_WeaponBobFactor, characterMovementFactor, BobSharpness * Time.deltaTime);
+                m_WeaponBobFactor = Mathf.Lerp(m_WeaponBobFactor, characterMovementFactor, BobSharpness * Time.deltaTime);
 
                 // Calculate vertical and horizontal weapon bob values based on a sine function
                 float bobAmount = IsAiming ? AimingBobAmount : DefaultBobAmount;
