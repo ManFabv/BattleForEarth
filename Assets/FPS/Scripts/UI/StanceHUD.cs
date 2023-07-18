@@ -22,12 +22,12 @@ namespace Unity.FPS.UI
             DebugUtility.HandleErrorIfNullFindObject<PlayerCharacterController, StanceHUD>(character, this);
             character.OnStanceChanged += OnStanceChanged;
 
-            OnStanceChanged(character.IsCrouching);
+            OnStanceChanged(stateOn: true);
         }
 
-        void OnStanceChanged(bool crouched)
+        void OnStanceChanged(bool stateOn)
         {
-            StanceImage.sprite = crouched ? CrouchingSprite : StandingSprite;
+            StanceImage.sprite = stateOn ? CrouchingSprite : StandingSprite;
         }
     }
 }
