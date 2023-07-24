@@ -1,14 +1,18 @@
-﻿using Unity.FPS.Game;
+﻿using Cinemachine;
+using KBCore.Refs;
+using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Unity.FPS.Gameplay
 {
     [RequireComponent(typeof(CharacterController), typeof(PlayerInputHandler), typeof(AudioSource))]
-    public class PlayerCharacterController : MonoBehaviour
+    public class PlayerCharacterController : ValidatedMonoBehaviour
     {
         [Header("References")] [Tooltip("Reference to the main camera used for the player")]
         public Camera PlayerCamera;
+        
+        public CinemachineDollyCart DollyCart;
 
         [Tooltip("Audio source for footsteps, jump, etc...")]
         public AudioSource AudioSource;
@@ -16,12 +20,10 @@ namespace Unity.FPS.Gameplay
         public UnityAction<bool> OnStanceChanged;
 
         public bool IsDead { get; private set; }
-
-        Health m_Health;
-        PlayerInputHandler m_InputHandler;
-        CharacterController m_Controller;
-        PlayerWeaponsManager m_WeaponsManager;
-        Actor m_Actor;
+        
+        [HideInInspector, SerializeField, Self] Health m_Health;
+        [HideInInspector, SerializeField, Self] CharacterController m_Controller;
+        [HideInInspector, SerializeField, Self] PlayerWeaponsManager m_WeaponsManager;
 
         void Awake()
         {
@@ -32,25 +34,6 @@ namespace Unity.FPS.Gameplay
 
         void Start()
         {
-            // fetch components on the same gameObject
-            m_Controller = GetComponent<CharacterController>();
-            DebugUtility.HandleErrorIfNullGetComponent<CharacterController, PlayerCharacterController>(m_Controller,
-                this, gameObject);
-
-            m_InputHandler = GetComponent<PlayerInputHandler>();
-            DebugUtility.HandleErrorIfNullGetComponent<PlayerInputHandler, PlayerCharacterController>(m_InputHandler,
-                this, gameObject);
-
-            m_WeaponsManager = GetComponent<PlayerWeaponsManager>();
-            DebugUtility.HandleErrorIfNullGetComponent<PlayerWeaponsManager, PlayerCharacterController>(
-                m_WeaponsManager, this, gameObject);
-
-            m_Health = GetComponent<Health>();
-            DebugUtility.HandleErrorIfNullGetComponent<Health, PlayerCharacterController>(m_Health, this, gameObject);
-
-            m_Actor = GetComponent<Actor>();
-            DebugUtility.HandleErrorIfNullGetComponent<Actor, PlayerCharacterController>(m_Actor, this, gameObject);
-
             m_Controller.enableOverlapRecovery = true;
 
             m_Health.OnDie += OnDie;
@@ -64,6 +47,12 @@ namespace Unity.FPS.Gameplay
             m_WeaponsManager.SwitchToWeaponIndex(-1, true);
 
             EventManager.Broadcast(Events.PlayerDeathEvent);
+        }
+
+        private void LateUpdate()
+        {
+            // we smoothly look at the movement direction (the dolly cart object, which is the one is moving)
+            PlayerCamera.transform.rotation = Quaternion.Slerp(PlayerCamera.transform.rotation, DollyCart.transform.rotation, 0.001f);
         }
     }
 }
