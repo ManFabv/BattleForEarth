@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using KBCore.Refs;
+using System.Collections.Generic;
+using Unity.FPS.Common;
 using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,7 +8,7 @@ using UnityEngine.Events;
 namespace Unity.FPS.Gameplay
 {
     [RequireComponent(typeof(PlayerInputHandler))]
-    public class PlayerWeaponsManager : MonoBehaviour
+    public class PlayerWeaponsManager : ValidatedMonoBehaviour
     {
         public enum WeaponSwitchState
         {
@@ -28,8 +30,11 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Position for weapons when active but not actively aiming")]
         public Transform DefaultWeaponPosition;
 
-        [Tooltip("Position for weapons when aiming")]
-        public Transform AimingWeaponPosition;
+        [Tooltip("Position where weapons should point when rotating to point to target")]
+        public Transform TargetAimingPosition;
+
+        [Tooltip("Parent object of the weapon to be rotated to point to target")]
+        public Transform ParentAimingObject;
 
         [Tooltip("Position for innactive weapons")]
         public Transform DownWeaponPosition;
@@ -43,9 +48,6 @@ namespace Unity.FPS.Gameplay
 
         [Tooltip("Distance the weapon bobs when not aiming")]
         public float DefaultBobAmount = 0.05f;
-
-        [Tooltip("Distance the weapon bobs when aiming")]
-        public float AimingBobAmount = 0.02f;
 
         [Header("Weapon Recoil")]
         [Tooltip("This will affect how fast the recoil moves the weapon, the bigger the value, the fastest")]
@@ -72,7 +74,6 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Layer to set FPS weapon gameObjects to")]
         public LayerMask FpsWeaponLayer;
 
-        public bool IsAiming { get; private set; }
         public bool IsPointingAtEnemy { get; private set; }
         public int ActiveWeaponIndex { get; private set; }
 
@@ -80,9 +81,9 @@ namespace Unity.FPS.Gameplay
         public UnityAction<WeaponController, int> OnAddedWeapon;
         public UnityAction<WeaponController, int> OnRemovedWeapon;
 
-        WeaponController[] m_WeaponSlots = new WeaponController[9]; // 9 available weapon slots
-        PlayerInputHandler m_InputHandler;
-        PlayerCharacterController m_PlayerCharacterController;
+        WeaponController[] m_WeaponSlots = new WeaponController[Statics.MAX_AMMOUNT_OF_WEAPONS_ALLOWED];
+        [HideInInspector, SerializeField, Self] PlayerInputHandler m_InputHandler;
+        [HideInInspector, SerializeField, Self] PlayerCharacterController m_PlayerCharacterController;
         float m_WeaponBobFactor;
         Vector3 m_LastCharacterPosition;
         Vector3 m_WeaponMainLocalPosition;
@@ -97,14 +98,6 @@ namespace Unity.FPS.Gameplay
         {
             ActiveWeaponIndex = -1;
             m_WeaponSwitchState = WeaponSwitchState.Down;
-
-            m_InputHandler = GetComponent<PlayerInputHandler>();
-            DebugUtility.HandleErrorIfNullGetComponent<PlayerInputHandler, PlayerWeaponsManager>(m_InputHandler, this,
-                gameObject);
-
-            m_PlayerCharacterController = GetComponent<PlayerCharacterController>();
-            DebugUtility.HandleErrorIfNullGetComponent<PlayerCharacterController, PlayerWeaponsManager>(
-                m_PlayerCharacterController, this, gameObject);
 
             SetFov(DefaultFov);
 
@@ -127,16 +120,44 @@ namespace Unity.FPS.Gameplay
             if (activeWeapon != null && activeWeapon.IsReloading)
                 return;
 
+            HandleShooting(activeWeapon);
+
+            HandleWeaponSwitching(activeWeapon);
+
+            HandlePointAtEnemy(activeWeapon);
+
+            HandleAiming(activeWeapon);
+        }
+
+        private void HandleAiming(WeaponController activeWeapon)
+        {
+            //we get input values
+            float horizontal = m_InputHandler.GetLookInputsHorizontalBySensitivity();
+            float vertical = m_InputHandler.GetLookInputsVerticalBySensitivity();
+
+            //we get directional vectors from the camera
+            Vector3 cameraUp = m_PlayerCharacterController.PlayerCamera.transform.up;
+            Vector3 cameraRight = m_PlayerCharacterController.PlayerCamera.transform.right;
+
+            //we make our directions to point in the cameras relative direction
+            Vector3 aimingVerticalRelative = vertical * cameraUp;
+            Vector3 aimingHorizontalRelative = horizontal * cameraRight;
+
+            //we combine directions for horizontal and vertical
+            TargetAimingPosition.Translate(aimingVerticalRelative + aimingHorizontalRelative, Space.World);
+
+            ParentAimingObject.LookAt(TargetAimingPosition);
+        }
+
+        private void HandleShooting(WeaponController activeWeapon)
+        {
             if (activeWeapon != null && m_WeaponSwitchState == WeaponSwitchState.Up)
             {
                 if (!activeWeapon.AutomaticReload && m_InputHandler.GetReloadButtonDown() && activeWeapon.CurrentAmmoRatio < 1.0f)
                 {
-                    IsAiming = false;
                     activeWeapon.StartReloadAnimation();
                     return;
                 }
-                // handle aiming down sights
-                IsAiming = m_InputHandler.GetAimInputHeld();
 
                 // handle shooting
                 bool hasFired = activeWeapon.HandleShootInputs(
@@ -151,10 +172,29 @@ namespace Unity.FPS.Gameplay
                     m_AccumulatedRecoil = Vector3.ClampMagnitude(m_AccumulatedRecoil, MaxRecoilDistance);
                 }
             }
+        }
 
+        private void HandlePointAtEnemy(WeaponController activeWeapon)
+        {
+            // Pointing at enemy handling
+            IsPointingAtEnemy = false;
+            if (activeWeapon)
+            {
+                if (Physics.Raycast(WeaponCamera.transform.position, WeaponCamera.transform.forward, out RaycastHit hit,
+                    1000, -1, QueryTriggerInteraction.Ignore))
+                {
+                    if (hit.collider.GetComponentInParent<Health>() != null)
+                    {
+                        IsPointingAtEnemy = true;
+                    }
+                }
+            }
+        }
+
+        private void HandleWeaponSwitching(WeaponController activeWeapon)
+        {
             // weapon switch handling
-            if (!IsAiming &&
-                (activeWeapon == null || !activeWeapon.IsCharging) &&
+            if ((activeWeapon == null || !activeWeapon.IsCharging) &&
                 (m_WeaponSwitchState == WeaponSwitchState.Up || m_WeaponSwitchState == WeaponSwitchState.Down))
             {
                 int switchWeaponInput = m_InputHandler.GetSwitchWeaponInput();
@@ -173,20 +213,6 @@ namespace Unity.FPS.Gameplay
                     }
                 }
             }
-
-            // Pointing at enemy handling
-            IsPointingAtEnemy = false;
-            if (activeWeapon)
-            {
-                if (Physics.Raycast(WeaponCamera.transform.position, WeaponCamera.transform.forward, out RaycastHit hit,
-                    1000, -1, QueryTriggerInteraction.Ignore))
-                {
-                    if (hit.collider.GetComponentInParent<Health>() != null)
-                    {
-                        IsPointingAtEnemy = true;
-                    }
-                }
-            }
         }
 
 
@@ -199,8 +225,7 @@ namespace Unity.FPS.Gameplay
             UpdateWeaponSwitching();
 
             // Set final weapon socket position based on all the combined animation influences
-            WeaponParentSocket.localPosition =
-                m_WeaponMainLocalPosition + m_WeaponBobLocalPosition + m_WeaponRecoilLocalPosition;
+            WeaponParentSocket.localPosition = m_WeaponMainLocalPosition + m_WeaponBobLocalPosition + m_WeaponRecoilLocalPosition;
         }
 
         // Sets the FOV of the main camera and the weapon camera simultaneously
@@ -286,15 +311,7 @@ namespace Unity.FPS.Gameplay
             if (m_WeaponSwitchState == WeaponSwitchState.Up)
             {
                 WeaponController activeWeapon = GetActiveWeapon();
-                if (IsAiming && activeWeapon)
-                {
-                    m_WeaponMainLocalPosition = Vector3.Lerp(m_WeaponMainLocalPosition,
-                        AimingWeaponPosition.localPosition + activeWeapon.AimOffset,
-                        AimingAnimationSpeed * Time.deltaTime);
-                    SetFov(Mathf.Lerp(m_PlayerCharacterController.PlayerCamera.fieldOfView,
-                        activeWeapon.AimZoomRatio * DefaultFov, AimingAnimationSpeed * Time.deltaTime));
-                }
-                else
+                if (activeWeapon)
                 {
                     m_WeaponMainLocalPosition = Vector3.Lerp(m_WeaponMainLocalPosition,
                         DefaultWeaponPosition.localPosition, AimingAnimationSpeed * Time.deltaTime);
@@ -314,22 +331,13 @@ namespace Unity.FPS.Gameplay
 
                 // calculate a smoothed weapon bob amount based on how close to our max grounded movement velocity we are
                 float characterMovementFactor = 0f;
-                //TODO-Reference: only left for future reference
-                //if (m_PlayerCharacterController.IsGrounded)
-                //{
-                //    characterMovementFactor =
-                //        Mathf.Clamp01(playerCharacterVelocity.magnitude /
-                //                      (m_PlayerCharacterController.MaxSpeedOnGround *
-                //                       m_PlayerCharacterController.SprintSpeedModifier));
-                //}
 
                 m_WeaponBobFactor = Mathf.Lerp(m_WeaponBobFactor, characterMovementFactor, BobSharpness * Time.deltaTime);
 
                 // Calculate vertical and horizontal weapon bob values based on a sine function
-                float bobAmount = IsAiming ? AimingBobAmount : DefaultBobAmount;
                 float frequency = BobFrequency;
-                float hBobValue = Mathf.Sin(Time.time * frequency) * bobAmount * m_WeaponBobFactor;
-                float vBobValue = ((Mathf.Sin(Time.time * frequency * 2f) * 0.5f) + 0.5f) * bobAmount *
+                float hBobValue = Mathf.Sin(Time.time * frequency) * DefaultBobAmount * m_WeaponBobFactor;
+                float vBobValue = ((Mathf.Sin(Time.time * frequency * 2f) * 0.5f) + 0.5f) * DefaultBobAmount *
                                   m_WeaponBobFactor;
 
                 // Apply weapon bob
