@@ -15,11 +15,11 @@
       "hash": "5de6e390c5374e64c28f43d80dbf34d9889da256"
     },
     "com.unity.addressables": {
-      "version": "1.21.14",
+      "version": "1.21.17",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.scriptablebuildpipeline": "1.21.7",
+        "com.unity.scriptablebuildpipeline": "1.21.9",
         "com.unity.modules.assetbundle": "1.0.0",
         "com.unity.modules.imageconversion": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0",
@@ -103,7 +103,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.18",
+      "version": "2.0.20",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -175,7 +175,7 @@
       }
     },
     "com.unity.scriptablebuildpipeline": {
-      "version": "1.21.7",
+      "version": "1.21.9",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -203,17 +203,6 @@
         "com.unity.render-pipelines.core": "14.0.7",
         "com.unity.searcher": "4.9.2"
       }
-    },
-    "com.unity.splines": {
-      "version": "2.2.1",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.settings-manager": "1.0.3",
-        "com.unity.mathematics": "1.2.1",
-        "com.unity.ugui": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
       "version": "1.1.33",
