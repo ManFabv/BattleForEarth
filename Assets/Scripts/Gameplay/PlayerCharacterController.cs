@@ -11,8 +11,6 @@ namespace Unity.FPS.Gameplay
     {
         [Header("References")] [Tooltip("Reference to the main camera used for the player")]
         public Camera PlayerCamera;
-        
-        public CinemachineDollyCart DollyCart;
 
         [Tooltip("Audio source for footsteps, jump, etc...")]
         public AudioSource AudioSource;
@@ -24,6 +22,7 @@ namespace Unity.FPS.Gameplay
         [HideInInspector, SerializeField, Self] Health m_Health;
         [HideInInspector, SerializeField, Self] CharacterController m_Controller;
         [HideInInspector, SerializeField, Self] PlayerWeaponsManager m_WeaponsManager;
+        [HideInInspector, SerializeField, Parent] CinemachineDollyCart DollyCart;
 
         void Awake()
         {

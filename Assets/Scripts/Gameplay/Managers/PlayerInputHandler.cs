@@ -1,9 +1,10 @@
-﻿using Unity.FPS.Game;
+﻿using KBCore.Refs;
+using Unity.FPS.Game;
 using UnityEngine;
 
 namespace Unity.FPS.Gameplay
 {
-    public class PlayerInputHandler : MonoBehaviour
+    public class PlayerInputHandler : ValidatedMonoBehaviour
     {
         [Tooltip("Sensitivity multiplier for moving the camera around")]
         public float LookSensitivity = 1f;
@@ -21,14 +22,14 @@ namespace Unity.FPS.Gameplay
         public bool InvertXAxis = false;
 
         GameFlowManager m_GameFlowManager;
-        PlayerCharacterController m_PlayerCharacterController;
+        [HideInInspector, SerializeField, Self] PlayerCharacterController m_PlayerCharacterController;
         bool m_FireInputWasHeld;
+
+        private float ValueHorizontalByInvert => InvertXAxis ? -1 : 1;
+        private float ValueVerticalByInvert => InvertYAxis ? 1 : -1;
 
         void Start()
         {
-            m_PlayerCharacterController = GetComponent<PlayerCharacterController>();
-            DebugUtility.HandleErrorIfNullGetComponent<PlayerCharacterController, PlayerInputHandler>(
-                m_PlayerCharacterController, this, gameObject);
             m_GameFlowManager = FindObjectOfType<GameFlowManager>();
             DebugUtility.HandleErrorIfNullFindObject<GameFlowManager, PlayerInputHandler>(m_GameFlowManager, this);
 
@@ -60,6 +61,18 @@ namespace Unity.FPS.Gameplay
             }
 
             return Vector3.zero;
+        }
+
+        public float GetLookInputsHorizontalBySensitivity()
+        {
+            return GetMouseOrStickLookAxis(GameConstants.k_MouseAxisNameHorizontal,
+                GameConstants.k_AxisNameJoystickLookHorizontal) * LookSensitivity * ValueHorizontalByInvert;
+        }
+
+        public float GetLookInputsVerticalBySensitivity()
+        {
+            return GetMouseOrStickLookAxis(GameConstants.k_MouseAxisNameVertical,
+                GameConstants.k_AxisNameJoystickLookVertical) * LookSensitivity * ValueVerticalByInvert;
         }
 
         public float GetLookInputsHorizontal()
@@ -117,20 +130,6 @@ namespace Unity.FPS.Gameplay
                 {
                     return Input.GetButton(GameConstants.k_ButtonNameFire);
                 }
-            }
-
-            return false;
-        }
-
-        public bool GetAimInputHeld()
-        {
-            if (CanProcessInput())
-            {
-                bool isGamepad = Input.GetAxis(GameConstants.k_ButtonNameGamepadAim) != 0f;
-                bool i = isGamepad
-                    ? (Input.GetAxis(GameConstants.k_ButtonNameGamepadAim) > 0f)
-                    : Input.GetButton(GameConstants.k_ButtonNameAim);
-                return i;
             }
 
             return false;
