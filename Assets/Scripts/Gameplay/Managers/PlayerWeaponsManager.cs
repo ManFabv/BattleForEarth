@@ -1,4 +1,5 @@
-﻿using KBCore.Refs;
+﻿using Cinemachine;
+using KBCore.Refs;
 using System.Collections.Generic;
 using Unity.FPS.Common;
 using Unity.FPS.Game;
@@ -74,6 +75,13 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Layer to set FPS weapon gameObjects to")]
         public LayerMask FpsWeaponLayer;
 
+        [Header("Movement/Aiming")]
+        [Tooltip("Velocity at which we want to rotate the camera to look at the movement direction")]
+        public float smoothLookAtRotationSpeed = 1f;
+
+        [Tooltip("Velocity at which we want to rotate the active weapon to aim at the crosshair direction")]
+        public float smoothAimingAtRotationSpeed = 10f;
+
         public bool IsPointingAtEnemy { get; private set; }
         public int ActiveWeaponIndex { get; private set; }
 
@@ -93,6 +101,16 @@ namespace Unity.FPS.Gameplay
         float m_TimeStartedWeaponSwitch;
         WeaponSwitchState m_WeaponSwitchState;
         int m_WeaponSwitchNewWeaponIndex;
+        CinemachineDollyCart m_DollyCart;
+
+        Vector3 cameraUp => m_PlayerCharacterController.PlayerCamera.transform.up;
+        Vector3 cameraRight => m_PlayerCharacterController.PlayerCamera.transform.right;
+
+        private void Awake()
+        {
+            m_DollyCart = GameObject.FindObjectOfType<CinemachineDollyCart>();
+            DebugUtility.HandleErrorIfNullFindObject<CinemachineDollyCart, PlayerWeaponsManager>(m_DollyCart, this);
+        }
 
         void Start()
         {
@@ -126,27 +144,42 @@ namespace Unity.FPS.Gameplay
 
             HandlePointAtEnemy(activeWeapon);
 
-            HandleAiming(activeWeapon);
+            HandleAiming();
+
+            HandleMoving();
         }
 
-        private void HandleAiming(WeaponController activeWeapon)
+        private void HandleMoving()
         {
             //we get input values
-            float horizontal = m_InputHandler.GetLookInputsHorizontalBySensitivity();
-            float vertical = m_InputHandler.GetLookInputsVerticalBySensitivity();
+            Vector3 movementInput = m_InputHandler.GetMoveInputBySpeed();
+            float horizontalInput = movementInput.x;
+            float verticalInput = movementInput.z;
 
-            //we get directional vectors from the camera
-            Vector3 cameraUp = m_PlayerCharacterController.PlayerCamera.transform.up;
-            Vector3 cameraRight = m_PlayerCharacterController.PlayerCamera.transform.right;
+            //we translate the player object according to the player input
+            m_PlayerCharacterController.transform.SmoothTranslate(verticalInput, horizontalInput, cameraUp, cameraRight, Time.deltaTime);
 
-            //we make our directions to point in the cameras relative direction
-            Vector3 aimingVerticalRelative = vertical * cameraUp;
-            Vector3 aimingHorizontalRelative = horizontal * cameraRight;
+            //after translate we clamp the localposition
+            //todo:
 
-            //we combine directions for horizontal and vertical
-            TargetAimingPosition.Translate(aimingVerticalRelative + aimingHorizontalRelative, Space.World);
+            //we make the camera to look at the dolly cart point
+            m_PlayerCharacterController.PlayerCamera.transform.SmoothLookAt(m_DollyCart.transform, cameraUp, smoothLookAtRotationSpeed);
+        }
 
-            ParentAimingObject.LookAt(TargetAimingPosition);
+        private void HandleAiming()
+        {
+            //we get input values
+            float horizontalInput = m_InputHandler.GetLookInputsHorizontalBySensitivity();
+            float verticalInput = m_InputHandler.GetLookInputsVerticalBySensitivity();
+
+            //we translate the target aiming object according to the player input
+            TargetAimingPosition.SmoothTranslate(verticalInput, horizontalInput, cameraUp, cameraRight, Time.deltaTime);
+
+            //after translate we clamp the localposition
+            //todo:
+
+            //we make the parent root object (which holds the weapon) to look at the target point
+            ParentAimingObject.SmoothLookAt(TargetAimingPosition, cameraUp, smoothAimingAtRotationSpeed);
         }
 
         private void HandleShooting(WeaponController activeWeapon)
