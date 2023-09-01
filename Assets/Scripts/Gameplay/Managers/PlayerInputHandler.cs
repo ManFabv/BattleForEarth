@@ -6,8 +6,18 @@ namespace Unity.FPS.Gameplay
 {
     public class PlayerInputHandler : ValidatedMonoBehaviour
     {
-        [Tooltip("Sensitivity multiplier for moving the camera around")]
-        public float LookSensitivity = 1f;
+        [Header("Control")]
+        [Tooltip("Horizontal sensitivity multiplier for moving the camera around")]
+        public float HorizontalLookSensitivity = 12f;
+
+        [Tooltip("Vertical sensitivity multiplier for moving the camera around")]
+        public float VerticalLookSensitivity = 10f;        
+
+        [Tooltip("Horizontal movement speed for the player")]
+        public float HorizontalMovementSpeed = 6f;
+
+        [Tooltip("Vertical movement speed for the player")]
+        public float VerticalMovementSpeed = 5f;
 
         [Tooltip("Additional sensitivity multiplier for WebGL")]
         public float WebglLookSensitivityMultiplier = 0.25f;
@@ -47,15 +57,16 @@ namespace Unity.FPS.Gameplay
             return Cursor.lockState == CursorLockMode.Locked && !m_GameFlowManager.GameIsEnding;
         }
 
-        public Vector3 GetMoveInput()
+        public Vector3 GetMoveInputBySpeed()
         {
             if (CanProcessInput())
             {
-                Vector3 move = new Vector3(Input.GetAxisRaw(GameConstants.k_AxisNameHorizontal), 0f,
-                    Input.GetAxisRaw(GameConstants.k_AxisNameVertical));
+                Vector3 move = new Vector3(Input.GetAxisRaw(GameConstants.k_AxisNameHorizontal), 0f, Input.GetAxisRaw(GameConstants.k_AxisNameVertical));
 
                 // constrain move input to a maximum magnitude of 1, otherwise diagonal movement might exceed the max move speed defined
                 move = Vector3.ClampMagnitude(move, 1);
+                move.x *= HorizontalMovementSpeed; 
+                move.z *= VerticalMovementSpeed;
 
                 return move;
             }
@@ -66,45 +77,13 @@ namespace Unity.FPS.Gameplay
         public float GetLookInputsHorizontalBySensitivity()
         {
             return GetMouseOrStickLookAxis(GameConstants.k_MouseAxisNameHorizontal,
-                GameConstants.k_AxisNameJoystickLookHorizontal) * LookSensitivity * ValueHorizontalByInvert;
+                GameConstants.k_AxisNameJoystickLookHorizontal) * HorizontalLookSensitivity * ValueHorizontalByInvert;
         }
 
         public float GetLookInputsVerticalBySensitivity()
         {
             return GetMouseOrStickLookAxis(GameConstants.k_MouseAxisNameVertical,
-                GameConstants.k_AxisNameJoystickLookVertical) * LookSensitivity * ValueVerticalByInvert;
-        }
-
-        public float GetLookInputsHorizontal()
-        {
-            return GetMouseOrStickLookAxis(GameConstants.k_MouseAxisNameHorizontal,
-                GameConstants.k_AxisNameJoystickLookHorizontal);
-        }
-
-        public float GetLookInputsVertical()
-        {
-            return GetMouseOrStickLookAxis(GameConstants.k_MouseAxisNameVertical,
-                GameConstants.k_AxisNameJoystickLookVertical);
-        }
-
-        public bool GetJumpInputDown()
-        {
-            if (CanProcessInput())
-            {
-                return Input.GetButtonDown(GameConstants.k_ButtonNameJump);
-            }
-
-            return false;
-        }
-
-        public bool GetJumpInputHeld()
-        {
-            if (CanProcessInput())
-            {
-                return Input.GetButton(GameConstants.k_ButtonNameJump);
-            }
-
-            return false;
+                GameConstants.k_AxisNameJoystickLookVertical) * VerticalLookSensitivity * ValueVerticalByInvert;
         }
 
         public bool GetFireInputDown()
@@ -140,26 +119,6 @@ namespace Unity.FPS.Gameplay
             if (CanProcessInput())
             {
                 return Input.GetButton(GameConstants.k_ButtonNameSprint);
-            }
-
-            return false;
-        }
-
-        public bool GetCrouchInputDown()
-        {
-            if (CanProcessInput())
-            {
-                return Input.GetButtonDown(GameConstants.k_ButtonNameCrouch);
-            }
-
-            return false;
-        }
-
-        public bool GetCrouchInputReleased()
-        {
-            if (CanProcessInput())
-            {
-                return Input.GetButtonUp(GameConstants.k_ButtonNameCrouch);
             }
 
             return false;
@@ -240,7 +199,7 @@ namespace Unity.FPS.Gameplay
                     i *= -1f;
 
                 // apply sensitivity multiplier
-                i *= LookSensitivity;
+                i *= VerticalLookSensitivity;
 
                 if (isGamepad)
                 {
