@@ -3,19 +3,22 @@ using KBCore.Refs;
 using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.TextCore.Text;
 
 namespace Unity.FPS.Gameplay
 {
     [RequireComponent(typeof(CharacterController), typeof(PlayerInputHandler), typeof(AudioSource))]
     public class PlayerCharacterController : ValidatedMonoBehaviour
     {
-        [Header("References")] [Tooltip("Reference to the main camera used for the player")]
-        public Camera PlayerCamera;
+        [Tooltip("Reference to the main camera used for the player")]
+        [field: SerializeField] public Camera PlayerCamera {  get; private set; }
 
-        [Tooltip("Audio source for footsteps, jump, etc...")]
-        public AudioSource AudioSource;
+        [Tooltip("How fast the camera will look at the target")]
+        [Range(0f, 1f)]
+        public float LookAtForwardSmoothTime = 0.1f;
 
-        public UnityAction<bool> OnStanceChanged;
+        //TODO: example of event
+        //public UnityAction<bool> OnStanceChanged;
 
         public bool IsDead { get; private set; }
         
@@ -23,6 +26,7 @@ namespace Unity.FPS.Gameplay
         [HideInInspector, SerializeField, Self] CharacterController m_Controller;
         [HideInInspector, SerializeField, Self] PlayerWeaponsManager m_WeaponsManager;
         [HideInInspector, SerializeField, Parent] CinemachineDollyCart DollyCart;
+        [HideInInspector, SerializeField, Self] AudioSource m_AudioSource;
 
         void Awake()
         {
@@ -51,7 +55,7 @@ namespace Unity.FPS.Gameplay
         private void LateUpdate()
         {
             // we smoothly look at the movement direction (the dolly cart object, which is the one is moving)
-            PlayerCamera.transform.rotation = Quaternion.Slerp(PlayerCamera.transform.rotation, DollyCart.transform.rotation, 0.001f);
+            PlayerCamera.transform.rotation = Quaternion.Slerp(PlayerCamera.transform.rotation, DollyCart.transform.rotation, LookAtForwardSmoothTime * Time.deltaTime);
         }
     }
 }

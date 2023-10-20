@@ -1,7 +1,6 @@
 ﻿using Cinemachine;
 using KBCore.Refs;
 using System.Collections.Generic;
-using Unity.FPS.Common;
 using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.Events;
@@ -89,7 +88,7 @@ namespace Unity.FPS.Gameplay
         public UnityAction<WeaponController, int> OnAddedWeapon;
         public UnityAction<WeaponController, int> OnRemovedWeapon;
 
-        WeaponController[] m_WeaponSlots = new WeaponController[Statics.MAX_AMMOUNT_OF_WEAPONS_ALLOWED];
+        WeaponController[] m_WeaponSlots = new WeaponController[GameConstants.MAX_AMMOUNT_OF_WEAPONS_ALLOWED];
         [HideInInspector, SerializeField, Self] PlayerInputHandler m_InputHandler;
         [HideInInspector, SerializeField, Self] PlayerCharacterController m_PlayerCharacterController;
         float m_WeaponBobFactor;
