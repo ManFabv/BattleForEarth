@@ -2,8 +2,6 @@
 using KBCore.Refs;
 using Unity.FPS.Game;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.TextCore.Text;
 
 namespace Unity.FPS.Gameplay
 {
