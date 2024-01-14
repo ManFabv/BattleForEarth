@@ -45,7 +45,8 @@
     "com.unity.modules.unitywebrequestwww": "1.0.0",
     "com.unity.modules.vehicles": "1.0.0",
     "com.unity.modules.video": "1.0.0",
-    "com.unity.modules.wind": "1.0.0"
+    "com.unity.modules.wind": "1.0.0",
+    "com.febucci.custom-hierarchy": "1.2.0"
   },
   "scopedRegistries": [
     {
@@ -60,6 +61,7 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "com.cysharp.unitask",
+        "com.febucci.custom-hierarchy",
         "com.kylewbanks.scenerefattribute",
         "com.littlebigfun.addressable-importer"
       ]

@@ -39,6 +39,7 @@ MonoBehaviour:
     m_Url: https://package.openupm.com
     m_Scopes:
     - com.cysharp.unitask
+    - com.febucci.custom-hierarchy
     - com.kylewbanks.scenerefattribute
     - com.littlebigfun.addressable-importer
     m_IsDefault: 0
