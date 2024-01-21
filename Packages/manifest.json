@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "com.cysharp.unitask": "2.5.0",
+    "com.febucci.custom-hierarchy": "1.2.0",
     "com.kylewbanks.scenerefattribute": "0.10.0",
+    "com.neuecc.unirx": "7.1.0",
     "com.unity.addressables": "1.21.19",
     "com.unity.ai.navigation": "1.1.5",
     "com.unity.cinemachine": "2.9.7",
@@ -13,7 +15,7 @@
     "com.unity.probuilder": "5.1.1",
     "com.unity.render-pipelines.universal": "14.0.8",
     "com.unity.test-framework": "1.1.33",
-    "com.unity.textmeshpro": "3.0.6",
+    "com.unity.textmeshpro": "3.0.7",
     "com.unity.timeline": "1.7.6",
     "com.unity.toolchain.win-x86_64-linux-x86_64": "2.0.6",
     "com.unity.ugui": "1.0.0",
@@ -45,8 +47,7 @@
     "com.unity.modules.unitywebrequestwww": "1.0.0",
     "com.unity.modules.vehicles": "1.0.0",
     "com.unity.modules.video": "1.0.0",
-    "com.unity.modules.wind": "1.0.0",
-    "com.febucci.custom-hierarchy": "1.2.0"
+    "com.unity.modules.wind": "1.0.0"
   },
   "scopedRegistries": [
     {
@@ -63,7 +64,8 @@
         "com.cysharp.unitask",
         "com.febucci.custom-hierarchy",
         "com.kylewbanks.scenerefattribute",
-        "com.littlebigfun.addressable-importer"
+        "com.littlebigfun.addressable-importer",
+        "com.neuecc.unirx"
       ]
     }
   ]

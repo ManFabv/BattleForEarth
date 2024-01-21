@@ -21,6 +21,13 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.neuecc.unirx": {
+      "version": "7.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.unity.addressables": {
       "version": "1.21.19",
       "depth": 0,
@@ -249,7 +256,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.6",
+      "version": "3.0.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
