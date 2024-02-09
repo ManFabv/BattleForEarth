@@ -158,7 +158,7 @@ namespace Unity.FPS.Gameplay
             //we translate the player object according to the player input
             m_PlayerCharacterController.transform.SmoothTranslate(verticalInput, horizontalInput, cameraUp, cameraRight, Time.deltaTime);
 
-            //after translate we clamp the localposition
+            //after translate we clamp the local position
             //todo:
 
             //we make the camera to look at the dolly cart point
@@ -174,8 +174,8 @@ namespace Unity.FPS.Gameplay
             //we translate the target aiming object according to the player input
             TargetAimingPosition.SmoothTranslate(verticalInput, horizontalInput, cameraUp, cameraRight, Time.deltaTime);
 
-            //after translate we clamp the localposition
-            //todo:
+            //after translate we clamp the local position
+            TargetAimingPosition.ClampTranslationInsideCameraBounds(m_PlayerCharacterController.PlayerCamera);
 
             //we make the parent root object (which holds the weapon) to look at the target point
             ParentAimingObject.SmoothLookAt(TargetAimingPosition, cameraUp, smoothAimingAtRotationSpeed);
