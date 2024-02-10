@@ -36,7 +36,7 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Parent object of the weapon to be rotated to point to target")]
         public Transform ParentAimingObject;
 
-        [Tooltip("Position for innactive weapons")]
+        [Tooltip("Position for inactive weapons")]
         public Transform DownWeaponPosition;
 
         [Header("Weapon Bob")]
@@ -59,7 +59,7 @@ namespace Unity.FPS.Gameplay
         [Tooltip("How fast the weapon goes back to it's original position after the recoil is finished")]
         public float RecoilRestitutionSharpness = 10f;
 
-        [Header("Misc")] [Tooltip("Speed at which the aiming animatoin is played")]
+        [Header("Misc")] [Tooltip("Speed at which the aiming animation is played")]
         public float AimingAnimationSpeed = 10f;
 
         [Tooltip("Field of view when not aiming")]
@@ -68,7 +68,7 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Portion of the regular FOV to apply to the weapon camera")]
         public float WeaponFovMultiplier = 1f;
 
-        [Tooltip("Delay before switching weapon a second time, to avoid recieving multiple inputs from mouse wheel")]
+        [Tooltip("Delay before switching weapon a second time, to avoid receiving multiple inputs from mouse wheel")]
         public float WeaponSwitchDelay = 1f;
 
         [Tooltip("Layer to set FPS weapon gameObjects to")]
@@ -83,6 +83,7 @@ namespace Unity.FPS.Gameplay
 
         public bool IsPointingAtEnemy { get; private set; }
         public int ActiveWeaponIndex { get; private set; }
+        public Vector2 PlayerCharacterTranslationLimits { get; private set; }
 
         public UnityAction<WeaponController> OnSwitchedToWeapon;
         public UnityAction<WeaponController, int> OnAddedWeapon;
@@ -109,6 +110,10 @@ namespace Unity.FPS.Gameplay
         {
             m_DollyCart = GameObject.FindObjectOfType<CinemachineDollyCart>();
             DebugUtility.HandleErrorIfNullFindObject<CinemachineDollyCart, PlayerWeaponsManager>(m_DollyCart, this);
+
+            // TODO: this should be taken from each dolly cart point which will tell us the limits from the
+            // current part of the path (to avoid going through building on tunnels, for instance)
+            PlayerCharacterTranslationLimits = new Vector2(2, 1);
         }
 
         void Start()
@@ -159,7 +164,7 @@ namespace Unity.FPS.Gameplay
             m_PlayerCharacterController.transform.SmoothTranslate(verticalInput, horizontalInput, cameraUp, cameraRight, Time.deltaTime);
 
             //after translate we clamp the local position
-            //todo:
+            m_PlayerCharacterController.transform.ClampTranslationInsideBounds(PlayerCharacterTranslationLimits);
 
             //we make the camera to look at the dolly cart point
             m_PlayerCharacterController.PlayerCamera.transform.SmoothLookAt(m_DollyCart.transform, cameraUp, smoothLookAtRotationSpeed);
@@ -345,10 +350,8 @@ namespace Unity.FPS.Gameplay
                 WeaponController activeWeapon = GetActiveWeapon();
                 if (activeWeapon)
                 {
-                    m_WeaponMainLocalPosition = Vector3.Lerp(m_WeaponMainLocalPosition,
-                        DefaultWeaponPosition.localPosition, AimingAnimationSpeed * Time.deltaTime);
-                    SetFov(Mathf.Lerp(m_PlayerCharacterController.PlayerCamera.fieldOfView, DefaultFov,
-                        AimingAnimationSpeed * Time.deltaTime));
+                    m_WeaponMainLocalPosition = Vector3.Lerp(m_WeaponMainLocalPosition, DefaultWeaponPosition.localPosition, AimingAnimationSpeed * Time.deltaTime);
+                    SetFov(Mathf.Lerp(m_PlayerCharacterController.PlayerCamera.fieldOfView, DefaultFov, AimingAnimationSpeed * Time.deltaTime));
                 }
             }
         }
@@ -358,9 +361,6 @@ namespace Unity.FPS.Gameplay
         {
             if (Time.deltaTime > 0f)
             {
-                Vector3 playerCharacterVelocity =
-                    (m_PlayerCharacterController.transform.position - m_LastCharacterPosition) / Time.deltaTime;
-
                 // calculate a smoothed weapon bob amount based on how close to our max grounded movement velocity we are
                 float characterMovementFactor = 0f;
 
@@ -369,8 +369,7 @@ namespace Unity.FPS.Gameplay
                 // Calculate vertical and horizontal weapon bob values based on a sine function
                 float frequency = BobFrequency;
                 float hBobValue = Mathf.Sin(Time.time * frequency) * DefaultBobAmount * m_WeaponBobFactor;
-                float vBobValue = ((Mathf.Sin(Time.time * frequency * 2f) * 0.5f) + 0.5f) * DefaultBobAmount *
-                                  m_WeaponBobFactor;
+                float vBobValue = ((Mathf.Sin(Time.time * frequency * 2f) * 0.5f) + 0.5f) * DefaultBobAmount * m_WeaponBobFactor;
 
                 // Apply weapon bob
                 m_WeaponBobLocalPosition.x = hBobValue;
@@ -386,14 +385,12 @@ namespace Unity.FPS.Gameplay
             // if the accumulated recoil is further away from the current position, make the current position move towards the recoil target
             if (m_WeaponRecoilLocalPosition.z >= m_AccumulatedRecoil.z * 0.99f)
             {
-                m_WeaponRecoilLocalPosition = Vector3.Lerp(m_WeaponRecoilLocalPosition, m_AccumulatedRecoil,
-                    RecoilSharpness * Time.deltaTime);
+                m_WeaponRecoilLocalPosition = Vector3.Lerp(m_WeaponRecoilLocalPosition, m_AccumulatedRecoil, RecoilSharpness * Time.deltaTime);
             }
             // otherwise, move recoil position to make it recover towards its resting pose
             else
             {
-                m_WeaponRecoilLocalPosition = Vector3.Lerp(m_WeaponRecoilLocalPosition, Vector3.zero,
-                    RecoilRestitutionSharpness * Time.deltaTime);
+                m_WeaponRecoilLocalPosition = Vector3.Lerp(m_WeaponRecoilLocalPosition, Vector3.zero, RecoilRestitutionSharpness * Time.deltaTime);
                 m_AccumulatedRecoil = m_WeaponRecoilLocalPosition;
             }
         }
@@ -454,13 +451,11 @@ namespace Unity.FPS.Gameplay
             // Handle moving the weapon socket position for the animated weapon switching
             if (m_WeaponSwitchState == WeaponSwitchState.PutDownPrevious)
             {
-                m_WeaponMainLocalPosition = Vector3.Lerp(DefaultWeaponPosition.localPosition,
-                    DownWeaponPosition.localPosition, switchingTimeFactor);
+                m_WeaponMainLocalPosition = Vector3.Lerp(DefaultWeaponPosition.localPosition, DownWeaponPosition.localPosition, switchingTimeFactor);
             }
             else if (m_WeaponSwitchState == WeaponSwitchState.PutUpNew)
             {
-                m_WeaponMainLocalPosition = Vector3.Lerp(DownWeaponPosition.localPosition,
-                    DefaultWeaponPosition.localPosition, switchingTimeFactor);
+                m_WeaponMainLocalPosition = Vector3.Lerp(DownWeaponPosition.localPosition, DefaultWeaponPosition.localPosition, switchingTimeFactor);
             }
         }
 
@@ -490,9 +485,7 @@ namespace Unity.FPS.Gameplay
                     weaponInstance.ShowWeapon(false);
 
                     // Assign the first person layer to the weapon
-                    int layerIndex =
-                        Mathf.RoundToInt(Mathf.Log(FpsWeaponLayer.value,
-                            2)); // This function converts a layermask to a layer index
+                    int layerIndex = Mathf.RoundToInt(Mathf.Log(FpsWeaponLayer.value, 2)); // This function converts a layer mask to a layer index
                     foreach (Transform t in weaponInstance.gameObject.GetComponentsInChildren<Transform>(true))
                     {
                         t.gameObject.layer = layerIndex;
@@ -556,8 +549,7 @@ namespace Unity.FPS.Gameplay
         public WeaponController GetWeaponAtSlotIndex(int index)
         {
             // find the active weapon in our weapon slots based on our active weapon index
-            if (index >= 0 &&
-                index < m_WeaponSlots.Length)
+            if (index >= 0 && index < m_WeaponSlots.Length)
             {
                 return m_WeaponSlots[index];
             }
