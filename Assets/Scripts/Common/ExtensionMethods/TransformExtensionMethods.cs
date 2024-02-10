@@ -39,11 +39,35 @@ public static class TransformExtensionMethods
         //we have to apply an offset to align to the player's view
         float offset = cameraHeigth / 2.0f;
         //we move the object to the correct local position clamping it's value to be inside of the camera view
-        objectToClamp.localPosition = new Vector3
+        Vector3 localPosition = new Vector3
         {
             x = Mathf.Clamp(objectToClamp.localPosition.x, -cameraWidth, cameraWidth),
             y = Mathf.Clamp(objectToClamp.localPosition.y, -cameraHeigth + offset, cameraHeigth + offset),
             z = objectToClamp.localPosition.z
         };
+        //we assign the local position
+        objectToClamp.localPosition = localPosition;
+    }
+
+    public static void ClampTranslationInsideBounds(this Transform objectToClamp, Vector2 limits)
+    {
+        if (objectToClamp == null) return; //we don't do anything if the object is null
+        //we clamp the local position inside given limit values
+        objectToClamp.ClampTranslationInsideBounds(limits.x, limits.y);
+    }
+
+    public static void ClampTranslationInsideBounds(this Transform objectToClamp, float limitX, float limitY)
+    {
+        if (objectToClamp == null) return; //we don't do anything if the object is null
+
+        //we clamp the local position inside given limit values
+        Vector3 localPosition = new Vector3
+        {
+            x = Mathf.Clamp(objectToClamp.localPosition.x, -limitX, limitX),
+            y = Mathf.Clamp(objectToClamp.localPosition.y, -limitY, limitY),
+            z = objectToClamp.localPosition.z
+        };
+        //we assign the local position
+        objectToClamp.localPosition = localPosition;
     }
 }
