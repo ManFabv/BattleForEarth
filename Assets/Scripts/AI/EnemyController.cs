@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using Unity.FPS.Game;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Events;
 
 namespace Unity.FPS.AI
 {
-    [RequireComponent(typeof(Health), typeof(Actor), typeof(NavMeshAgent))]
+    [RequireComponent(typeof(Health), typeof(Actor))]
     public class EnemyController : MonoBehaviour
     {
         [System.Serializable]
@@ -60,7 +59,7 @@ namespace Unity.FPS.AI
         [Tooltip("The duration of the flash on hit")]
         public float FlashOnHitDuration = 0.5f;
 
-        [Header("Sounds")] [Tooltip("Sound played when recieving damages")]
+        [Header("Sounds")] [Tooltip("Sound played when receiving damages")]
         public AudioClip DamageTick;
 
         [Header("VFX")] [Tooltip("The VFX prefab spawned when the enemy dies")]
@@ -101,7 +100,7 @@ namespace Unity.FPS.AI
         public bool IsTargetInAttackRange => DetectionModule.IsTargetInAttackRange;
         public bool IsSeeingTarget => DetectionModule.IsSeeingTarget;
         public bool HadKnownTarget => DetectionModule.HadKnownTarget;
-        public NavMeshAgent NavMeshAgent { get; private set; }
+        //public NavMeshAgent NavMeshAgent { get; private set; }
         public DetectionModule DetectionModule { get; private set; }
 
         int m_PathDestinationNodeIndex;
@@ -134,7 +133,7 @@ namespace Unity.FPS.AI
             m_Actor = GetComponent<Actor>();
             DebugUtility.HandleErrorIfNullGetComponent<Actor, EnemyController>(m_Actor, this, gameObject);
 
-            NavMeshAgent = GetComponent<NavMeshAgent>();
+            //NavMeshAgent = GetComponent<NavMeshAgent>();
             m_SelfColliders = GetComponentsInChildren<Collider>();
 
             m_GameFlowManager = FindObjectOfType<GameFlowManager>();
@@ -150,10 +149,8 @@ namespace Unity.FPS.AI
             weapon.ShowWeapon(true);
 
             var detectionModules = GetComponentsInChildren<DetectionModule>();
-            DebugUtility.HandleErrorIfNoComponentFound<DetectionModule, EnemyController>(detectionModules.Length, this,
-                gameObject);
-            DebugUtility.HandleWarningIfDuplicateObjects<DetectionModule, EnemyController>(detectionModules.Length,
-                this, gameObject);
+            DebugUtility.HandleErrorIfNoComponentFound<DetectionModule, EnemyController>(detectionModules.Length, this, gameObject);
+            DebugUtility.HandleWarningIfDuplicateObjects<DetectionModule, EnemyController>(detectionModules.Length, this, gameObject);
             // Initialize detection module
             DetectionModule = detectionModules[0];
             DetectionModule.onDetectedTarget += OnDetectedTarget;
@@ -161,16 +158,15 @@ namespace Unity.FPS.AI
             onAttack += DetectionModule.OnAttack;
 
             var navigationModules = GetComponentsInChildren<NavigationModule>();
-            DebugUtility.HandleWarningIfDuplicateObjects<DetectionModule, EnemyController>(detectionModules.Length,
-                this, gameObject);
-            // Override navmesh agent data
-            if (navigationModules.Length > 0)
-            {
-                m_NavigationModule = navigationModules[0];
-                NavMeshAgent.speed = m_NavigationModule.MoveSpeed;
-                NavMeshAgent.angularSpeed = m_NavigationModule.AngularSpeed;
-                NavMeshAgent.acceleration = m_NavigationModule.Acceleration;
-            }
+            DebugUtility.HandleWarningIfDuplicateObjects<DetectionModule, EnemyController>(detectionModules.Length, this, gameObject);
+            //// Override navmesh agent data
+            //if (navigationModules.Length > 0)
+            //{
+            //    m_NavigationModule = navigationModules[0];
+            //    NavMeshAgent.speed = m_NavigationModule.MoveSpeed;
+            //    NavMeshAgent.angularSpeed = m_NavigationModule.AngularSpeed;
+            //    NavMeshAgent.acceleration = m_NavigationModule.Acceleration;
+            //}
 
             foreach (var renderer in GetComponentsInChildren<Renderer>(true))
             {
@@ -195,8 +191,7 @@ namespace Unity.FPS.AI
             {
                 m_EyeColorMaterialPropertyBlock = new MaterialPropertyBlock();
                 m_EyeColorMaterialPropertyBlock.SetColor("_EmissionColor", DefaultEyeColor);
-                m_EyeRendererData.Renderer.SetPropertyBlock(m_EyeColorMaterialPropertyBlock,
-                    m_EyeRendererData.MaterialIndex);
+                m_EyeRendererData.Renderer.SetPropertyBlock(m_EyeColorMaterialPropertyBlock, m_EyeRendererData.MaterialIndex);
             }
         }
 
@@ -234,8 +229,7 @@ namespace Unity.FPS.AI
             if (m_EyeRendererData.Renderer != null)
             {
                 m_EyeColorMaterialPropertyBlock.SetColor("_EmissionColor", DefaultEyeColor);
-                m_EyeRendererData.Renderer.SetPropertyBlock(m_EyeColorMaterialPropertyBlock,
-                    m_EyeRendererData.MaterialIndex);
+                m_EyeRendererData.Renderer.SetPropertyBlock(m_EyeColorMaterialPropertyBlock, m_EyeRendererData.MaterialIndex);
             }
         }
 
@@ -247,8 +241,7 @@ namespace Unity.FPS.AI
             if (m_EyeRendererData.Renderer != null)
             {
                 m_EyeColorMaterialPropertyBlock.SetColor("_EmissionColor", AttackEyeColor);
-                m_EyeRendererData.Renderer.SetPropertyBlock(m_EyeColorMaterialPropertyBlock,
-                    m_EyeRendererData.MaterialIndex);
+                m_EyeRendererData.Renderer.SetPropertyBlock(m_EyeColorMaterialPropertyBlock, m_EyeRendererData.MaterialIndex);
             }
         }
 
@@ -258,8 +251,7 @@ namespace Unity.FPS.AI
             if (lookDirection.sqrMagnitude != 0f)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-                transform.rotation =
-                    Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * OrientationSpeed);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * OrientationSpeed);
             }
         }
 
@@ -309,10 +301,10 @@ namespace Unity.FPS.AI
 
         public void SetNavDestination(Vector3 destination)
         {
-            if (NavMeshAgent)
-            {
-                NavMeshAgent.SetDestination(destination);
-            }
+            //if (NavMeshAgent)
+            //{
+            //    NavMeshAgent.SetDestination(destination);
+            //}
         }
 
         public void UpdatePathDestination(bool inverseOrder = false)
@@ -323,8 +315,7 @@ namespace Unity.FPS.AI
                 if ((transform.position - GetDestinationOnPath()).magnitude <= PathReachingRadius)
                 {
                     // increment path destination index
-                    m_PathDestinationNodeIndex =
-                        inverseOrder ? (m_PathDestinationNodeIndex - 1) : (m_PathDestinationNodeIndex + 1);
+                    m_PathDestinationNodeIndex = inverseOrder ? (m_PathDestinationNodeIndex - 1) : (m_PathDestinationNodeIndex + 1);
                     if (m_PathDestinationNodeIndex < 0)
                     {
                         m_PathDestinationNodeIndex += PatrolPath.PathNodes.Count;
@@ -363,7 +354,7 @@ namespace Unity.FPS.AI
             var vfx = Instantiate(DeathVfx, DeathVfxSpawnPoint.position, Quaternion.identity);
             Destroy(vfx, 5f);
 
-            // tells the game flow manager to handle the enemy destuction
+            // tells the game flow manager to handle the enemy destruction
             m_EnemyManager.UnregisterEnemy(this);
 
             // loot an object
@@ -447,8 +438,7 @@ namespace Unity.FPS.AI
             if (m_Weapons == null)
             {
                 m_Weapons = GetComponentsInChildren<WeaponController>();
-                DebugUtility.HandleErrorIfNoComponentFound<WeaponController, EnemyController>(m_Weapons.Length, this,
-                    gameObject);
+                DebugUtility.HandleErrorIfNoComponentFound<WeaponController, EnemyController>(m_Weapons.Length, this, gameObject);
 
                 for (int i = 0; i < m_Weapons.Length; i++)
                 {
@@ -467,8 +457,7 @@ namespace Unity.FPS.AI
                 SetCurrentWeapon(0);
             }
 
-            DebugUtility.HandleErrorIfNullGetComponent<WeaponController, EnemyController>(m_CurrentWeapon, this,
-                gameObject);
+            DebugUtility.HandleErrorIfNullGetComponent<WeaponController, EnemyController>(m_CurrentWeapon, this, gameObject);
 
             return m_CurrentWeapon;
         }
