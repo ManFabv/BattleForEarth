@@ -113,7 +113,7 @@ namespace Unity.FPS.Gameplay
 
             // TODO: this should be taken from each dolly cart point which will tell us the limits from the
             // current part of the path (to avoid going through building on tunnels, for instance)
-            PlayerCharacterTranslationLimits = new Vector2(2, 1);
+            PlayerCharacterTranslationLimits = new Vector2(3, 2);
         }
 
         void Start()
@@ -167,7 +167,8 @@ namespace Unity.FPS.Gameplay
             m_PlayerCharacterController.transform.ClampTranslationInsideBounds(PlayerCharacterTranslationLimits);
 
             //we make the camera to look at the dolly cart point
-            m_PlayerCharacterController.PlayerCamera.transform.SmoothLookAt(m_DollyCart.transform, cameraUp, smoothLookAtRotationSpeed);
+            //TODO: here we lose the correct aiming. FIX and re add this functionality
+            //m_PlayerCharacterController.PlayerCamera.transform.SmoothLookAt(m_DollyCart.transform, cameraUp, smoothLookAtRotationSpeed);
         }
 
         private void HandleAiming()

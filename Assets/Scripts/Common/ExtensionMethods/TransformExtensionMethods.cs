@@ -29,24 +29,29 @@ public static class TransformExtensionMethods
     public static void ClampTranslationInsideCameraBounds(this Transform objectToClamp, Camera camera)
     {
         if (objectToClamp == null || camera == null) return; //we don't do anything if the object is null
-        // TODO: move this calculations inside its own class inheriting from Unity Camera and adding those properties
-        // Those should only be recalculated when the player changes resolution (we can make a callback OnResolutionChange to be
-        // triggered when the player changes resolution from pause menu)
-        // TODO: calculations breaks when the player moves the character to the sides or up/down
-        //we calculate the boundaries of the camera view
-        float cameraWidth = Screen.width / camera.fieldOfView / 2.0f;
-        float cameraHeigth = cameraWidth / camera.aspect;
-        //we have to apply an offset to align to the player's view
-        float offset = cameraHeigth / 2.0f;
-        //we move the object to the correct local position clamping it's value to be inside of the camera view
-        Vector3 localPosition = new Vector3
-        {
-            x = Mathf.Clamp(objectToClamp.localPosition.x, -cameraWidth, cameraWidth),
-            y = Mathf.Clamp(objectToClamp.localPosition.y, -cameraHeigth + offset, cameraHeigth + offset),
-            z = objectToClamp.localPosition.z
-        };
-        //we assign the local position
-        objectToClamp.localPosition = localPosition;
+        //we take the position of the object to screen space
+        float distance = camera.WorldToScreenPoint(objectToClamp.position).z;
+        //we take the local position of the camera to apply the correct offset to the object
+        Vector2 cameraLocalPosition = camera.transform.localPosition;
+        //we convert the screen bounds to local space which we want to move
+        Vector3 bottomLeftLocal = camera.CameraBottomLeftLocalSpace(distance);
+        Vector3 topRightLocal = camera.CameraTopRightLocalSpace(distance);
+        //we get the renderer of the object if it exists
+        Renderer objectToClampRenderer = objectToClamp.GetComponentInChildren<Renderer>();
+        //we calculate the bounds size if it exists
+        Vector3 objectToClampRendererBoundsSize = objectToClampRenderer.GetRendererBoundsSize();
+        //we save the local position of the object
+        Vector3 newLocalPosition = objectToClamp.localPosition;
+        //we calculate the limits taking into account the camera position and the size of the object to clamp
+        float minX = bottomLeftLocal.x + cameraLocalPosition.x + objectToClampRendererBoundsSize.x;
+        float maxX = topRightLocal.x + cameraLocalPosition.x - objectToClampRendererBoundsSize.x;
+        float minY = bottomLeftLocal.y + cameraLocalPosition.y - objectToClampRendererBoundsSize.y;
+        float maxY = topRightLocal.y + cameraLocalPosition.y - objectToClampRendererBoundsSize.y;
+        //we are going to calculate the new local position but clamped to be inside screen bounds
+        newLocalPosition.x = Mathf.Clamp(newLocalPosition.x, minX, maxX);
+        newLocalPosition.y = Mathf.Clamp(newLocalPosition.y, minY, maxY);
+        //we update the local position
+        objectToClamp.localPosition = newLocalPosition;
     }
 
     public static void ClampTranslationInsideBounds(this Transform objectToClamp, Vector2 limits)
