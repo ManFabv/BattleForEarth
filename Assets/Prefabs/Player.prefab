@@ -703,8 +703,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HorizontalLookSensitivity: 12
   VerticalLookSensitivity: 10
-  HorizontalMovementSpeed: 6
-  VerticalMovementSpeed: 5
+  HorizontalMovementSpeed: 7
+  VerticalMovementSpeed: 6
   WebglLookSensitivityMultiplier: 0.25
   TriggerAxisThreshold: 0.4
   InvertYAxis: 0
