@@ -54,22 +54,23 @@ public static class TransformExtensionMethods
         objectToClamp.localPosition = newLocalPosition;
     }
 
-    public static void ClampTranslationInsideBounds(this Transform objectToClamp, Vector2 limits)
+    public static void ClampTranslationInsideBounds(this Transform objectToClamp, Camera camera, Vector2 limits)
     {
         if (objectToClamp == null) return; //we don't do anything if the object is null
         //we clamp the local position inside given limit values
-        objectToClamp.ClampTranslationInsideBounds(limits.x, limits.y);
+        objectToClamp.ClampTranslationInsideBounds(camera, limits.x, limits.y);
     }
 
-    public static void ClampTranslationInsideBounds(this Transform objectToClamp, float limitX, float limitY)
+    public static void ClampTranslationInsideBounds(this Transform objectToClamp, Camera camera, float limitX, float limitY)
     {
         if (objectToClamp == null) return; //we don't do anything if the object is null
-
+        //we take the local position of the camera to apply the correct offset to the object
+        Vector2 cameraLocalPosition = camera.transform.localPosition;
         //we clamp the local position inside given limit values
         Vector3 localPosition = new Vector3
         {
-            x = Mathf.Clamp(objectToClamp.localPosition.x, -limitX, limitX),
-            y = Mathf.Clamp(objectToClamp.localPosition.y, -limitY, limitY),
+            x = Mathf.Clamp(objectToClamp.localPosition.x, -limitX + cameraLocalPosition.x, limitX - cameraLocalPosition.x),
+            y = Mathf.Clamp(objectToClamp.localPosition.y, -limitY - cameraLocalPosition.y, limitY - cameraLocalPosition.y),
             z = objectToClamp.localPosition.z
         };
         //we assign the local position
