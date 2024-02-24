@@ -218,8 +218,7 @@ namespace Unity.FPS.Gameplay
             IsPointingAtEnemy = false;
             if (activeWeapon)
             {
-                if (Physics.Raycast(WeaponCamera.transform.position, WeaponCamera.transform.forward, out RaycastHit hit,
-                    1000, -1, QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(WeaponCamera.transform.position, WeaponCamera.transform.forward, out RaycastHit hit, 1000, -1, QueryTriggerInteraction.Ignore))
                 {
                     if (hit.collider.GetComponentInParent<Health>() != null)
                     {
@@ -232,8 +231,7 @@ namespace Unity.FPS.Gameplay
         private void HandleWeaponSwitching(WeaponController activeWeapon)
         {
             // weapon switch handling
-            if ((activeWeapon == null || !activeWeapon.IsCharging) &&
-                (m_WeaponSwitchState == WeaponSwitchState.Up || m_WeaponSwitchState == WeaponSwitchState.Down))
+            if ((activeWeapon == null || !activeWeapon.IsCharging) && (m_WeaponSwitchState == WeaponSwitchState.Up || m_WeaponSwitchState == WeaponSwitchState.Down))
             {
                 int switchWeaponInput = m_InputHandler.GetSwitchWeaponInput();
                 if (switchWeaponInput != 0)
