@@ -169,9 +169,7 @@ namespace Unity.FPS.Game
         public float CurrentCharge { get; private set; }
         public Vector3 MuzzleWorldVelocity { get; private set; }
 
-        public float GetAmmoNeededToShoot() =>
-            (ShootType != WeaponShootType.Charge ? 1f : Mathf.Max(1f, AmmoUsedOnStartCharge)) /
-            (MaxAmmo * BulletsPerShot);
+        public float GetAmmoNeededToShoot() => (ShootType != WeaponShootType.Charge ? 1f : Mathf.Max(1f, AmmoUsedOnStartCharge)) / (MaxAmmo * BulletsPerShot);
 
         public int GetCarriedPhysicalBullets() => m_CarriedPhysicalBullets;
         public int GetCurrentAmmo() => Mathf.FloorToInt(CurrentAmmo);
@@ -434,10 +432,7 @@ namespace Unity.FPS.Game
 
         bool TryBeginCharge()
         {
-            if (!IsCharging
-                && CurrentAmmo >= AmmoUsedOnStartCharge
-                && Mathf.FloorToInt((CurrentAmmo - AmmoUsedOnStartCharge) * BulletsPerShot) > 0
-                && m_LastTimeShot + DelayBetweenShots < Time.time)
+            if (!IsCharging && CurrentAmmo >= AmmoUsedOnStartCharge && Mathf.FloorToInt((CurrentAmmo - AmmoUsedOnStartCharge) * BulletsPerShot) > 0 && m_LastTimeShot + DelayBetweenShots < Time.time)
             {
                 UseAmmo(AmmoUsedOnStartCharge);
 
@@ -467,24 +462,20 @@ namespace Unity.FPS.Game
 
         void HandleShoot()
         {
-            int bulletsPerShotFinal = ShootType == WeaponShootType.Charge
-                ? Mathf.CeilToInt(CurrentCharge * BulletsPerShot)
-                : BulletsPerShot;
+            int bulletsPerShotFinal = ShootType == WeaponShootType.Charge ? Mathf.CeilToInt(CurrentCharge * BulletsPerShot) : BulletsPerShot;
 
             // spawn all bullets with random direction
             for (int i = 0; i < bulletsPerShotFinal; i++)
             {
                 Vector3 shotDirection = GetShotDirectionWithinSpread(WeaponMuzzle);
-                ProjectileBase newProjectile = Instantiate(ProjectilePrefab, WeaponMuzzle.position,
-                    Quaternion.LookRotation(shotDirection));
+                ProjectileBase newProjectile = Instantiate(ProjectilePrefab, WeaponMuzzle.position, Quaternion.LookRotation(shotDirection));
                 newProjectile.Shoot(this);
             }
 
             // muzzle flash
             if (MuzzleFlashPrefab != null)
             {
-                GameObject muzzleFlashInstance = Instantiate(MuzzleFlashPrefab, WeaponMuzzle.position,
-                    WeaponMuzzle.rotation, WeaponMuzzle.transform);
+                GameObject muzzleFlashInstance = Instantiate(MuzzleFlashPrefab, WeaponMuzzle.position, WeaponMuzzle.rotation, WeaponMuzzle.transform);
                 // Unparent the muzzleFlashInstance
                 if (UnparentMuzzleFlash)
                 {
@@ -521,7 +512,8 @@ namespace Unity.FPS.Game
         public Vector3 GetShotDirectionWithinSpread(Transform shootTransform)
         {
             float spreadAngleRatio = BulletSpreadAngle / 180f;
-            Vector3 spreadWorldDirection = Vector3.Slerp(shootTransform.forward, UnityEngine.Random.insideUnitSphere, spreadAngleRatio);
+            Vector3 forwardDirection = shootTransform.forward;
+            Vector3 spreadWorldDirection = Vector3.Slerp(forwardDirection, UnityEngine.Random.insideUnitSphere, spreadAngleRatio);
 
             return spreadWorldDirection;
         }

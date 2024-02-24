@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using KBCore.Refs;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Unity.FPS.Game
 {
-    public abstract class ProjectileBase : MonoBehaviour
+    public abstract class ProjectileBase : ValidatedMonoBehaviour
     {
         public GameObject Owner { get; private set; }
         public Vector3 InitialPosition { get; private set; }
