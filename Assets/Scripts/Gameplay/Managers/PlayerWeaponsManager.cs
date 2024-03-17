@@ -205,9 +205,9 @@ namespace Unity.FPS.Gameplay
 
                 // handle shooting
                 bool hasFired = activeWeapon.HandleShootInputs(
-                    m_InputHandler.GetFireInputDown() || m_InputHandler.GetFireSecondInputDown(),
-                    m_InputHandler.GetFireInputHeld() || m_InputHandler.GetFireSecondInputHeld(),
-                    m_InputHandler.GetFireInputReleased() || m_InputHandler.GetFireSecondInputReleased());
+                    m_InputHandler.GetFireInputDown(ActiveWeaponIndex),
+                    m_InputHandler.GetFireInputHeld(ActiveWeaponIndex),
+                    m_InputHandler.GetFireInputReleased(ActiveWeaponIndex));
 
                 // Handle accumulating recoil
                 if (hasFired)
@@ -242,8 +242,9 @@ namespace Unity.FPS.Gameplay
                 //we get the switch weapon input
                 int switchWeaponInput = m_InputHandler.GetSwitchWeaponInput();
 
-                bool isShootingFirst = m_InputHandler.GetFireInputDown() || m_InputHandler.GetFireInputHeld();
-                bool isShootingSecond = m_InputHandler.GetFireSecondInputDown() || m_InputHandler.GetFireSecondInputHeld();
+                //TODO: improve this by using a fire config as scriptable object
+                bool isShootingFirst = m_InputHandler.GetFireInputDown(0) || m_InputHandler.GetFireInputHeld(0);
+                bool isShootingSecond = m_InputHandler.GetFireInputDown(1) || m_InputHandler.GetFireInputHeld(1);
                 if (ActiveWeaponIndex == 0 && isShootingSecond)
                 {
                     switchWeaponInput = 1;
