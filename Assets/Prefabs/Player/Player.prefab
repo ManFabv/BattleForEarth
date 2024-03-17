@@ -779,6 +779,7 @@ MonoBehaviour:
     m_Bits: 1024
   smoothLookAtRotationSpeed: 1
   smoothAimingAtRotationSpeed: 10
+  crosshairReference: {fileID: 1122610430159900552}
   m_InputHandler: {fileID: 6145509692674227223}
   m_PlayerCharacterController: {fileID: 814417836257332542}
 --- !u!143 &3122855503829242450
