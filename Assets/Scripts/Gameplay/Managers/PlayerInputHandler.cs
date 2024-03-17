@@ -34,6 +34,7 @@ namespace Unity.FPS.Gameplay
         GameFlowManager m_GameFlowManager;
         [HideInInspector, SerializeField, Self] PlayerCharacterController m_PlayerCharacterController;
         bool m_FireInputWasHeld;
+        bool m_FireSecondInputWasHeld;
 
         private float ValueHorizontalByInvert => InvertXAxis ? -1 : 1;
         private float ValueVerticalByInvert => InvertYAxis ? 1 : -1;
@@ -50,6 +51,7 @@ namespace Unity.FPS.Gameplay
         void LateUpdate()
         {
             m_FireInputWasHeld = GetFireInputHeld();
+            m_FireSecondInputWasHeld = GetFireSecondInputHeld();
         }
 
         public bool CanProcessInput()
@@ -114,6 +116,34 @@ namespace Unity.FPS.Gameplay
             return false;
         }
 
+        public bool GetFireSecondInputDown()
+        {
+            return GetFireSecondInputHeld() && !m_FireSecondInputWasHeld;
+        }
+
+        public bool GetFireSecondInputReleased()
+        {
+            return !GetFireSecondInputHeld() && m_FireSecondInputWasHeld;
+        }
+
+        public bool GetFireSecondInputHeld()
+        {
+            if (CanProcessInput())
+            {
+                bool isGamepad = Input.GetAxis(GameConstants.k_ButtonNameGamepadFire) != 0f;
+                if (isGamepad)
+                {
+                    return Input.GetAxis(GameConstants.k_ButtonNameGamepadFireSecond) >= TriggerAxisThreshold;
+                }
+                else
+                {
+                    return Input.GetButton(GameConstants.k_ButtonNameFireSecond);
+                }
+            }
+
+            return false;
+        }
+
         public bool GetSprintInputHeld()
         {
             if (CanProcessInput())
@@ -138,7 +168,6 @@ namespace Unity.FPS.Gameplay
         {
             if (CanProcessInput())
             {
-
                 bool isGamepad = Input.GetAxis(GameConstants.k_ButtonNameGamepadSwitchWeapon) != 0f;
                 string axisName = isGamepad
                     ? GameConstants.k_ButtonNameGamepadSwitchWeapon
