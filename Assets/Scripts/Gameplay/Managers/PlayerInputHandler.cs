@@ -33,10 +33,12 @@ namespace Unity.FPS.Gameplay
 
         GameFlowManager m_GameFlowManager;
         [HideInInspector, SerializeField, Self] PlayerCharacterController m_PlayerCharacterController;
-        bool m_FireInputWasHeld;
+        bool[] m_FireInputWasHeld = new bool[Mathf.Min(GameConstants.k_FireButtonName.Length, GameConstants.k_FireGamepadButtonName.Length)];
 
         private float ValueHorizontalByInvert => InvertXAxis ? -1 : 1;
         private float ValueVerticalByInvert => InvertYAxis ? 1 : -1;
+
+        private bool IsNotValidInputIndex(int index) => !GameConstants.k_FireButtonName.IsIndexValid(index) || !GameConstants.k_FireGamepadButtonName.IsIndexValid(index);
 
         void Start()
         {
@@ -49,7 +51,10 @@ namespace Unity.FPS.Gameplay
 
         void LateUpdate()
         {
-            m_FireInputWasHeld = GetFireInputHeld();
+            for(int i=0; i<m_FireInputWasHeld.Length; i++)
+            {
+                m_FireInputWasHeld[i] = GetFireInputHeld(i);
+            }
         }
 
         public bool CanProcessInput()
@@ -86,28 +91,40 @@ namespace Unity.FPS.Gameplay
                 GameConstants.k_AxisNameJoystickLookVertical) * VerticalLookSensitivity * ValueVerticalByInvert;
         }
 
-        public bool GetFireInputDown()
+        public bool GetFireInputDown(int index)
         {
-            return GetFireInputHeld() && !m_FireInputWasHeld;
+            if (IsNotValidInputIndex(index))
+            {
+                return false;
+            }
+            return GetFireInputHeld(index) && !m_FireInputWasHeld[index];
         }
 
-        public bool GetFireInputReleased()
+        public bool GetFireInputReleased(int index)
         {
-            return !GetFireInputHeld() && m_FireInputWasHeld;
+            if (IsNotValidInputIndex(index))
+            {
+                return false;
+            }
+            return !GetFireInputHeld(index) && m_FireInputWasHeld[index];
         }
 
-        public bool GetFireInputHeld()
+        public bool GetFireInputHeld(int index)
         {
+            if (IsNotValidInputIndex(index))
+            {
+                return false;
+            }
             if (CanProcessInput())
             {
-                bool isGamepad = Input.GetAxis(GameConstants.k_ButtonNameGamepadFire) != 0f;
+                bool isGamepad = Input.GetAxis(GameConstants.k_FireGamepadButtonName[index]) != 0f;
                 if (isGamepad)
                 {
-                    return Input.GetAxis(GameConstants.k_ButtonNameGamepadFire) >= TriggerAxisThreshold;
+                    return Input.GetAxis(GameConstants.k_FireGamepadButtonName[index]) >= TriggerAxisThreshold;
                 }
                 else
                 {
-                    return Input.GetButton(GameConstants.k_ButtonNameFire);
+                    return Input.GetButton(GameConstants.k_FireButtonName[index]);
                 }
             }
 
@@ -138,7 +155,6 @@ namespace Unity.FPS.Gameplay
         {
             if (CanProcessInput())
             {
-
                 bool isGamepad = Input.GetAxis(GameConstants.k_ButtonNameGamepadSwitchWeapon) != 0f;
                 string axisName = isGamepad
                     ? GameConstants.k_ButtonNameGamepadSwitchWeapon
@@ -155,6 +171,16 @@ namespace Unity.FPS.Gameplay
             }
 
             return 0;
+        }
+
+        public bool IsFiringWeaponAtIndex(int index)
+        {
+            if(IsNotValidInputIndex(index))
+            {
+                return false;
+            }
+
+            return Input.GetButtonDown(GameConstants.k_FireButtonName[index]) || Input.GetButtonDown(GameConstants.k_FireGamepadButtonName[index]);
         }
 
         public int GetSelectWeaponInput()
