@@ -239,7 +239,20 @@ namespace Unity.FPS.Gameplay
             // weapon switch handling
             if ((activeWeapon == null || !activeWeapon.IsCharging) && (m_WeaponSwitchState == WeaponSwitchState.Up || m_WeaponSwitchState == WeaponSwitchState.Down))
             {
+                //we get the switch weapon input
                 int switchWeaponInput = m_InputHandler.GetSwitchWeaponInput();
+
+                bool isShootingFirst = m_InputHandler.GetFireInputDown() || m_InputHandler.GetFireInputHeld();
+                bool isShootingSecond = m_InputHandler.GetFireSecondInputDown() || m_InputHandler.GetFireSecondInputHeld();
+                if (ActiveWeaponIndex == 0 && isShootingSecond)
+                {
+                    switchWeaponInput = 1;
+                }
+                else if (ActiveWeaponIndex == 1 && isShootingFirst)
+                {
+                    switchWeaponInput = -1;
+                }
+
                 if (switchWeaponInput != 0)
                 {
                     bool switchUp = switchWeaponInput > 0;
