@@ -15,7 +15,7 @@
       "url": "https://package.openupm.com"
     },
     "com.kylewbanks.scenerefattribute": {
-      "version": "0.11.0",
+      "version": "0.11.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -315,7 +315,7 @@
       }
     },
     "com.unity.visualscripting": {
-      "version": "1.9.1",
+      "version": "1.9.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
