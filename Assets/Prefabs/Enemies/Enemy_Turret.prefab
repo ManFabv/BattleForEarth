@@ -243,14 +243,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelfDestructYHeight: -20
+  EnemyConfig: {fileID: 11400000, guid: 0283c13bc49453c489b8355a37b931ab, type: 2}
   PathReachingRadius: 0
   OrientationSpeed: 10
   DeathDuration: 0
   SwapToNextWeapon: 0
   DelayAfterWeaponSwap: 0
   EyeColorMaterial: {fileID: 2100000, guid: 778fbfe9a7e4a96418b9312dbfc4d67c, type: 2}
-  DefaultEyeColor: {r: 23.849056, g: 7.292185, b: 0, a: 1}
-  AttackEyeColor: {r: 32, g: 1.4610044, b: 0, a: 1}
+  DefaultEyeColor: {r: 0, g: 0.64177275, b: 1, a: 1}
+  AttackEyeColor: {r: 0, g: 0.64177275, b: 1, a: 1}
   BodyMaterial: {fileID: 2100000, guid: bc52f7878b77b454787353158253aa1a, type: 2}
   OnHitBodyGradient:
     serializedVersion: 2
@@ -685,6 +686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponName: mg
+  ShotConfig: {fileID: 0}
   WeaponIcon: {fileID: 0}
   CrosshairDataDefault:
     CrosshairSprite: {fileID: 0}

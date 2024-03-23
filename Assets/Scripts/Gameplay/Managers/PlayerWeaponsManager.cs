@@ -367,6 +367,8 @@ namespace Unity.FPS.Gameplay
             WeaponController newWeapon = GetActiveWeapon();
             // we change the sprite
             crosshairReference.sprite = newWeapon.CrosshairDataDefault.CrosshairSprite;
+            // we change the color of the sprite
+            crosshairReference.color = newWeapon.CrosshairDataDefault.CrosshairColor;
         }
 
         // Updates weapon position and camera FoV for the aiming transition
