@@ -4,7 +4,10 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "fps.Common"
+        "UniRx",
+        "TNRD.NSubstitute",
+        "fps.Common",
+        "fps.TestsCommon"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

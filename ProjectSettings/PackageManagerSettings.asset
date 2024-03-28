@@ -43,6 +43,7 @@ MonoBehaviour:
     - com.kylewbanks.scenerefattribute
     - com.littlebigfun.addressable-importer
     - com.neuecc.unirx
+    - net.tnrd.nsubstitute
     m_IsDefault: 0
     m_Capabilities: 0
     m_ConfigSource: 4

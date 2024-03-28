@@ -9,5 +9,6 @@ namespace Assets.Scripts.Common.Timer
         public void Pause();
         public void Resume();
         public void Stop();
+        public bool IsDisposed { get; }
     }
 }

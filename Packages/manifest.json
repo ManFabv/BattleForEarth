@@ -47,7 +47,8 @@
     "com.unity.modules.unitywebrequestwww": "1.0.0",
     "com.unity.modules.vehicles": "1.0.0",
     "com.unity.modules.video": "1.0.0",
-    "com.unity.modules.wind": "1.0.0"
+    "com.unity.modules.wind": "1.0.0",
+    "net.tnrd.nsubstitute": "5.1.0"
   },
   "scopedRegistries": [
     {
@@ -65,7 +66,8 @@
         "com.febucci.custom-hierarchy",
         "com.kylewbanks.scenerefattribute",
         "com.littlebigfun.addressable-importer",
-        "com.neuecc.unirx"
+        "com.neuecc.unirx",
+        "net.tnrd.nsubstitute"
       ]
     }
   ]

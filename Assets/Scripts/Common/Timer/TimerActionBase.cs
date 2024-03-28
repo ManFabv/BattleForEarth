@@ -4,47 +4,60 @@ using UniRx;
 
 public abstract class TimerActionBase : ITimerAction
 {
+#region Protected properties
     protected IDisposable timerDisposable = default;
     protected Subject<bool> pauseSubject = new Subject<bool>();
     protected float intervalInSeconds = 0;
     protected Action action = default;
+#endregion
 
+#region Public properties
+    public bool IsDisposed => !pauseSubject.HasObservers;
+#endregion
+
+#region Abstract Methods
     protected abstract void StartTimer(float intervalInSeconds, Action action);
+#endregion
 
-    public void Dispose()
-    {
-        timerDisposable?.Dispose();
-        pauseSubject.OnNext(false);
-    }
-
+#region ITimerAction Interface methods
     public void Start(float intervalInSeconds, Action action)
     {
-        this.intervalInSeconds = intervalInSeconds;
+        this.intervalInSeconds = Math.Max(intervalInSeconds, 0); //we don't allow negative values
         this.action = action;
+        
+        pauseSubject.OnNext(false);
 
         StartTimer(intervalInSeconds, action);
     }
 
+    public void Restart()
+    {
+        Resume();
+    }
+
     public void Pause()
     {
-        timerDisposable?.Dispose();
-        pauseSubject.OnNext(true);
+        Stop();
     }
 
     public void Resume()
     {
+        Stop();
         Start(intervalInSeconds, action);
-        pauseSubject.OnNext(false);
     }
 
     public void Stop()
     {
         Dispose();
     }
+#endregion
 
-    public void Restart()
+#region IDisposable methods
+    public void Dispose()
     {
-        Stop();
-        Start(intervalInSeconds, action);
+        timerDisposable?.Dispose();
+        timerDisposable = null;
+        pauseSubject.OnNext(true);
     }
+#endregion
 }
