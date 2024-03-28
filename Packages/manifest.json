@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.cysharp.unitask": "2.5.3",
+    "com.cysharp.unitask": "2.5.4",
     "com.febucci.custom-hierarchy": "1.2.0",
     "com.kylewbanks.scenerefattribute": "0.11.2",
     "com.neuecc.unirx": "7.1.0",
