@@ -1,10 +1,15 @@
+using Assets.Scripts.Common.Timer;
 using NUnit.Framework;
+using System;
 using System.Collections;
 using UnityEngine.TestTools;
 
 public class TimerActionManagerTests
 {
     TimerActionManager timerManager;
+    private Action nullAction = () => { };
+    private float timerInterval = 0.5f;
+    private ITimerAction timer;
 
     [SetUp]
     public void SetUp()
@@ -12,11 +17,27 @@ public class TimerActionManagerTests
         timerManager = new TimerActionManager();
     }
 
-    [UnityTest]
-    public IEnumerator SingleActionTimerTestsWithEnumeratorPasses()
+    [TearDown]
+    public void TearDown()
     {
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
+        timer.Dispose();
+    }
+
+    [UnityTest]
+    public IEnumerator CreateTimer_AfterCallingWithValidParameters_ReturnsAValidRepeatingActionTimer()
+    {
+        timer = timerManager.CreateTimer<RepeatingActionTimer>(timerInterval, nullAction);
+        Assert.NotNull(timer);
         yield return null;
+        Assert.IsFalse(timer.IsDisposed);
+    }
+
+    [UnityTest]
+    public IEnumerator CreateTimer_AfterCallingWithValidParameters_ReturnsAValidSingleActionTimer()
+    {
+        timer = timerManager.CreateTimer<SingleActionTimer>(timerInterval, nullAction);
+        Assert.NotNull(timer);
+        yield return null;
+        Assert.IsFalse(timer.IsDisposed);
     }
 }
