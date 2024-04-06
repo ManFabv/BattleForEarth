@@ -146,19 +146,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponName: Shotgun
-  ShotConfig: {fileID: 11400000, guid: 5111d486a6105f54387395ca5cfc7a87, type: 2}
   WeaponIcon: {fileID: 21300000, guid: 8cbb10368086f014a8b7fc8932e7f436, type: 3}
-  CrosshairDataDefault:
-    CrosshairSprite: {fileID: 21300000, guid: 2962952d6e5ae7342a298d45a3945069, type: 3}
-    CrosshairSize: 50
-    CrosshairColor: {r: 0, g: 0.64177275, b: 1, a: 1}
-  CrosshairDataTargetInSight:
-    CrosshairSprite: {fileID: 21300000, guid: 2962952d6e5ae7342a298d45a3945069, type: 3}
-    CrosshairSize: 30
-    CrosshairColor: {r: 0, g: 0.64177275, b: 1, a: 1}
+  CrosshairDataDefault: {fileID: 11400000, guid: 5111d486a6105f54387395ca5cfc7a87,
+    type: 2}
   WeaponRoot: {fileID: 1505447205160222267}
   WeaponMuzzle: {fileID: 8334323006752503713}
-  ShootType: 1
   ProjectilePrefab: {fileID: 8924682559891268397, guid: f05c7e6fbbfbe824388456bb4abff9d4,
     type: 3}
   DelayBetweenShots: 0.6
@@ -166,6 +158,7 @@ MonoBehaviour:
   BulletsPerShot: 24
   RecoilForce: 1
   AimZoomRatio: 0.7
+  ShootRange: 1000
   AimOffset: {x: 0, y: 0.13, z: 0}
   AutomaticReload: 1
   HasPhysicalBullets: 0

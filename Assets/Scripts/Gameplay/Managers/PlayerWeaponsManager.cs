@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace Unity.FPS.Gameplay
 {
@@ -82,9 +81,6 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Velocity at which we want to rotate the active weapon to aim at the crosshair direction")]
         public float smoothAimingAtRotationSpeed = 10f;
 
-        [Tooltip("Crosshair Canvas element reference")]
-        public Image crosshairReference;
-
         public bool IsPointingAtEnemy { get; private set; }
         public int ActiveWeaponIndex { get; private set; }
         public Vector2 PlayerCharacterTranslationLimits { get; private set; }
@@ -114,8 +110,6 @@ namespace Unity.FPS.Gameplay
         {
             m_DollyCart = GameObject.FindObjectOfType<CinemachineDollyCart>();
             DebugUtility.HandleErrorIfNullFindObject<CinemachineDollyCart, PlayerWeaponsManager>(m_DollyCart, this);
-
-            DebugUtility.HandleErrorIfNullFindObject<Image, PlayerWeaponsManager>(crosshairReference, this);
 
             // TODO: this should be taken from each dolly cart point which will tell us the limits from the
             // current part of the path (to avoid going through building on tunnels, for instance)

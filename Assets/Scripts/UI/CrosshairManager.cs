@@ -10,15 +10,13 @@ namespace Unity.FPS.UI
     {
         public Image CrosshairImage;
         public Sprite NullCrosshairSprite;
-        public float CrosshairUpdateshrpness = 5f;
 
         [HideInInspector, SerializeField, Self] PlayerWeaponsManager m_WeaponsManager;
         
         bool m_WasPointingAtEnemy;
         RectTransform m_CrosshairRectTransform;
-        CrosshairData m_CrosshairDataDefault;
-        CrosshairData m_CrosshairDataTarget;
-        CrosshairData m_CurrentCrosshair;
+        ShotTypeConfig m_CrosshairDataDefault;
+        ShotTypeConfig m_CurrentCrosshair;
 
         void Start()
         {
@@ -35,25 +33,30 @@ namespace Unity.FPS.UI
 
         void UpdateCrosshairPointingAtEnemy(bool force)
         {
+            if (m_CrosshairDataDefault == null)
+                return;
+
             if (m_CrosshairDataDefault.CrosshairSprite == null)
                 return;
+            
+            m_CurrentCrosshair = m_CrosshairDataDefault;
 
             if ((force || !m_WasPointingAtEnemy) && m_WeaponsManager.IsPointingAtEnemy)
             {
-                m_CurrentCrosshair = m_CrosshairDataTarget;
                 CrosshairImage.sprite = m_CurrentCrosshair.CrosshairSprite;
                 m_CrosshairRectTransform.sizeDelta = m_CurrentCrosshair.CrosshairSize * Vector2.one;
             }
             else if ((force || m_WasPointingAtEnemy) && !m_WeaponsManager.IsPointingAtEnemy)
             {
-                m_CurrentCrosshair = m_CrosshairDataDefault;
                 CrosshairImage.sprite = m_CurrentCrosshair.CrosshairSprite;
                 m_CrosshairRectTransform.sizeDelta = m_CurrentCrosshair.CrosshairSize * Vector2.one;
             }
 
-            CrosshairImage.color = Color.Lerp(CrosshairImage.color, m_CurrentCrosshair.CrosshairColor, Time.deltaTime * CrosshairUpdateshrpness);
-            var crosshairSize = m_WeaponsManager.IsPointingAtEnemy ? m_CrosshairDataTarget.CrosshairSize : m_CurrentCrosshair.CrosshairSize;
-            m_CrosshairRectTransform.sizeDelta = Mathf.Lerp(m_CrosshairRectTransform.sizeDelta.x, m_CurrentCrosshair.CrosshairSize, Time.deltaTime * CrosshairUpdateshrpness) * Vector2.one;
+            int crosshairSize = m_WeaponsManager.IsPointingAtEnemy ? m_CurrentCrosshair.CrosshairAtSigthSize : m_CurrentCrosshair.CrosshairSize;
+            float crosshairUpdateshrpness = m_CurrentCrosshair.CrosshairUpdateshrpness;
+
+            CrosshairImage.color = Color.Lerp(CrosshairImage.color, m_CurrentCrosshair.CrosshairColor, Time.deltaTime * crosshairUpdateshrpness);
+            m_CrosshairRectTransform.sizeDelta = Mathf.Lerp(m_CrosshairRectTransform.sizeDelta.x, crosshairSize, Time.deltaTime * crosshairUpdateshrpness) * Vector2.one;
         }
 
         void OnWeaponChanged(WeaponController newWeapon)
@@ -62,7 +65,6 @@ namespace Unity.FPS.UI
             {
                 CrosshairImage.enabled = true;
                 m_CrosshairDataDefault = newWeapon.CrosshairDataDefault;
-                m_CrosshairDataTarget = newWeapon.CrosshairDataTargetInSight;
                 m_CrosshairRectTransform = CrosshairImage.GetComponent<RectTransform>();
                 DebugUtility.HandleErrorIfNullGetComponent<RectTransform, CrosshairManager>(m_CrosshairRectTransform, this, CrosshairImage.gameObject);
             }

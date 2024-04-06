@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f059d3d9b2606f64c8fb5b8e6b7ec20f, type: 3}
   m_Name: ShotBlue
   m_EditorClassIdentifier: 
-  Type: 1
+  CrosshairSprite: {fileID: 21300000, guid: 2962952d6e5ae7342a298d45a3945069, type: 3}
+  CrosshairSize: 50
+  CrosshairAtSigthSize: 30
+  CrosshairColor: {r: 0, g: 0.64177275, b: 1, a: 1}
+  ShootType: 1
+  CrosshairUpdateshrpness: 30
+  DefaultDamage: 7
+  VulnerableDamage: 14

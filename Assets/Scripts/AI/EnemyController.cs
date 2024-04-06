@@ -22,6 +22,9 @@ namespace Unity.FPS.AI
         }
 
         [Header("Parameters")]
+        [Tooltip("Config from where we are going to take damage and vulnerability (shot) type")]
+        public ShotTypeConfig VulnerabilityConfig;
+
         [Tooltip("The Y height at which the enemy will be automatically killed (if it falls off of the level)")]
         public float SelfDestructYHeight = -20f;
 
