@@ -224,7 +224,7 @@ namespace Unity.FPS.Gameplay
             IsPointingAtEnemy = false;
             if (activeWeapon)
             {
-                if (Physics.Raycast(WeaponCamera.transform.position, WeaponCamera.transform.forward, out RaycastHit hit, 1000, -1, QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(activeWeapon.WeaponMuzzle.position, activeWeapon.WeaponMuzzle.forward, out RaycastHit hit, activeWeapon.ShootRange, -1, QueryTriggerInteraction.Ignore))
                 {
                     if (hit.collider.GetComponentInParent<Health>() != null)
                     {
@@ -361,16 +361,6 @@ namespace Unity.FPS.Gameplay
             return null;
         }
 
-        private void UpdateToCurrentWeaponCrosshair()
-        {
-            // we get the active weapon
-            WeaponController newWeapon = GetActiveWeapon();
-            // we change the sprite
-            crosshairReference.sprite = newWeapon.CrosshairDataDefault.CrosshairSprite;
-            // we change the color of the sprite
-            crosshairReference.color = newWeapon.CrosshairDataDefault.CrosshairColor;
-        }
-
         // Updates weapon position and camera FoV for the aiming transition
         void UpdateWeaponAiming()
         {
@@ -474,8 +464,6 @@ namespace Unity.FPS.Gameplay
                 else if (m_WeaponSwitchState == WeaponSwitchState.PutUpNew)
                 {
                     m_WeaponSwitchState = WeaponSwitchState.Up;
-                    // we update the crosshair when we finished the weapon up animation
-                    UpdateToCurrentWeaponCrosshair();
                 }
             }
 

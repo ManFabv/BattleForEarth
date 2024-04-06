@@ -70,6 +70,10 @@ namespace Unity.FPS.Game
         [Tooltip("Ratio of the default FOV that this weapon applies while aiming")] [Range(0f, 1f)]
         public float AimZoomRatio = 1f;
 
+        [Tooltip("How far the weapon can affect enemies")]
+        [Range(0f, 10000f)]
+        public float ShootRange = 1000f;
+
         [Tooltip("Translation to apply to weapon arm when aiming with this weapon")]
         public Vector3 AimOffset;
 
