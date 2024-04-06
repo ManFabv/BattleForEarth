@@ -31,9 +31,6 @@ namespace Unity.FPS.Game
         [Header("Information")] [Tooltip("The name that will be displayed in the UI for this weapon")]
         public string WeaponName;
 
-        [Tooltip("Shot Scriptable Object Config)")]
-        public ShotTypeConfig ShotConfig;
-
         [Tooltip("The image that will be displayed in the UI for this weapon")]
         public Sprite WeaponIcon;
 
