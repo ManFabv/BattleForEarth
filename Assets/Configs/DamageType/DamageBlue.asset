@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: DamageBlue
   m_EditorClassIdentifier: 
   damage: 7
+  comboDamage: 14
+  OnComboAchieved: {fileID: 11400000, guid: 4d416948bae34424db0a1e0fa9633ce3, type: 2}

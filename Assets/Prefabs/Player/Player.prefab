@@ -580,6 +580,7 @@ GameObject:
   - component: {fileID: 4205022973215787166}
   - component: {fileID: 1272397862697293493}
   - component: {fileID: 7292978499713446800}
+  - component: {fileID: 8513800275300331763}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -867,6 +868,20 @@ MonoBehaviour:
   NullCrosshairSprite: {fileID: 21300000, guid: 2962952d6e5ae7342a298d45a3945069,
     type: 3}
   m_WeaponsManager: {fileID: 298744117520805562}
+--- !u!114 &8513800275300331763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7253983127304857660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0184dbd10d62b6848a3b4c9499bff38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <gameplayEventConfig>k__BackingField: {fileID: 11400000, guid: 4d416948bae34424db0a1e0fa9633ce3,
+    type: 2}
 --- !u!1 &7383874627095517793
 GameObject:
   m_ObjectHideFlags: 0

@@ -108,12 +108,7 @@ namespace Unity.FPS.Gameplay
                 {
                     if (IsHitValid(hit))
                     {
-                        DamageTypeConfig vulnerability = null;
-                        if(hit.collider.GetComponent<Damageable>() is Damageable  damageable)
-                        {
-                            vulnerability = damageable.vulnerabilityConfig;
-                        }
-                        OnHit(hit.point, hit.normal, hit.collider, vulnerability);
+                        OnHit(hit.point, hit.normal, hit.collider);
                     }
                 }
             }
@@ -184,12 +179,7 @@ namespace Unity.FPS.Gameplay
                         closestHit.normal = -transform.forward;
                     }
 
-                    DamageTypeConfig vulnerability = null;
-                    if (closestHit.collider.GetComponent<Damageable>() is Damageable damageable)
-                    {
-                        vulnerability = damageable.vulnerabilityConfig;
-                    }
-                    OnHit(closestHit.point, closestHit.normal, closestHit.collider, vulnerability);
+                    OnHit(closestHit.point, closestHit.normal, closestHit.collider);
                 }
             }
 
@@ -219,11 +209,16 @@ namespace Unity.FPS.Gameplay
             return true;
         }
 
-        void OnHit(Vector3 point, Vector3 normal, Collider collider, DamageTypeConfig vulnerability)
+        void OnHit(Vector3 point, Vector3 normal, Collider collider)
         {
             // damage
             if (AreaOfDamage)
             {
+                DamageTypeConfig vulnerability = null;
+                if (collider.GetComponent<Damageable>() is Damageable damageable)
+                {
+                    vulnerability = damageable.vulnerabilityConfig;
+                }
                 // area damage
                 AreaOfDamage.InflictDamageInArea(Damage.CalculateDamage(vulnerability), point, HittableLayers, k_TriggerInteraction, m_ProjectileBase.Owner);
             }
@@ -233,7 +228,7 @@ namespace Unity.FPS.Gameplay
                 Damageable damageable = collider.GetComponent<Damageable>();
                 if (damageable)
                 {
-                    damageable.InflictDamage(Damage.CalculateDamage(vulnerability), false, m_ProjectileBase.Owner);
+                    damageable.InflictDamage(Damage.CalculateDamage(damageable.vulnerabilityConfig), false, m_ProjectileBase.Owner);
                 }
             }
 
