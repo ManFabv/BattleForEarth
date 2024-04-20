@@ -6,7 +6,7 @@ public class GameplayEventListener : MonoBehaviour
     [field: SerializeField, Header("Events")]
     public GameplayEventsConfig gameplayEventConfig {  get; private set; }
     [SerializeField]
-    public UnityEvent onEventRaised;
+    public UnityEvent<DamageTypeConfig> onEventRaised;
 
     private void OnEnable()
     {

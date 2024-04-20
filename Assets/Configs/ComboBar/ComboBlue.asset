@@ -13,5 +13,11 @@ MonoBehaviour:
   m_Name: ComboBlue
   m_EditorClassIdentifier: 
   <MaxComboValue>k__BackingField: 20
+  <ValueToIncrementOnCombo>k__BackingField: 1
   <ShotTypeConfig>k__BackingField: {fileID: 11400000, guid: 5111d486a6105f54387395ca5cfc7a87,
     type: 2}
+  <DamageTypeConfig>k__BackingField: {fileID: 11400000, guid: eec5dc77bb627304cab41095b9769784,
+    type: 2}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 4089e4a9ebf3cbd49b5b5c5eab9cc1c9,
+    type: 3}
+  OnBarFull: {fileID: 11400000, guid: a10acb9f0532e3a40b15ebaf829fdf74, type: 2}

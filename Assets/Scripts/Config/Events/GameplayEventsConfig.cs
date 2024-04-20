@@ -16,13 +16,13 @@ public class GameplayEventsConfig : ScriptableObject
         listeners.Remove(listener);
     }
 
-    public void RaiseGameplayEvent()
+    public void RaiseGameplayEvent(DamageTypeConfig vulnerability)
     {
         foreach (GameplayEventListener listener in listeners)
         {
             if (listener.onEventRaised != null)
             {
-                listener.onEventRaised.Invoke();
+                listener.onEventRaised.Invoke(vulnerability);
             }
         }
     }
