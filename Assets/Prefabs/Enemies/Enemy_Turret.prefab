@@ -69,6 +69,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DamageMultiplier: 1
   SensibilityToSelfdamage: 0.5
+  vulnerabilityConfig: {fileID: 11400000, guid: eec5dc77bb627304cab41095b9769784,
+    type: 2}
 --- !u!65 &9194442102086525668
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -190,6 +192,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DamageMultiplier: 1
   SensibilityToSelfdamage: 0.5
+  vulnerabilityConfig: {fileID: 11400000, guid: eec5dc77bb627304cab41095b9769784,
+    type: 2}
 --- !u!1 &2015434656898269652
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,7 +247,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelfDestructYHeight: -20
-  EnemyConfig: {fileID: 11400000, guid: 0283c13bc49453c489b8355a37b931ab, type: 2}
   PathReachingRadius: 0
   OrientationSpeed: 10
   DeathDuration: 0
@@ -686,19 +689,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponName: mg
-  ShotConfig: {fileID: 0}
   WeaponIcon: {fileID: 0}
-  CrosshairDataDefault:
-    CrosshairSprite: {fileID: 0}
-    CrosshairSize: 0
-    CrosshairColor: {r: 0, g: 0, b: 0, a: 0}
-  CrosshairDataTargetInSight:
-    CrosshairSprite: {fileID: 0}
-    CrosshairSize: 0
-    CrosshairColor: {r: 0, g: 0, b: 0, a: 0}
+  CrosshairDataDefault: {fileID: 0}
   WeaponRoot: {fileID: 8815063736924141185}
   WeaponMuzzle: {fileID: 2096565386399891227}
-  ShootType: 1
   ProjectilePrefab: {fileID: 8924682559891268397, guid: 154bfb4989fe16d439e8f3fb7c20b72b,
     type: 3}
   DelayBetweenShots: 0.06
@@ -706,6 +700,7 @@ MonoBehaviour:
   BulletsPerShot: 1
   RecoilForce: 1
   AimZoomRatio: 1
+  ShootRange: 1000
   AimOffset: {x: 0, y: 0, z: 0}
   AutomaticReload: 1
   HasPhysicalBullets: 0

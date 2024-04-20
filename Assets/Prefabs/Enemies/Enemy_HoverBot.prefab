@@ -108,7 +108,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SelfDestructYHeight: -20
-  EnemyConfig: {fileID: 11400000, guid: 01975a801e184f34a95da8342808d0a5, type: 2}
   PathReachingRadius: 2
   OrientationSpeed: 10
   DeathDuration: 0
@@ -511,6 +510,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DamageMultiplier: 1
   SensibilityToSelfdamage: 0.5
+  vulnerabilityConfig: {fileID: 11400000, guid: 615c50fb4c7dbc246a4c55d7ff4de974,
+    type: 2}
 --- !u!136 &7239241538075871158
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -760,19 +761,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponName: 
-  ShotConfig: {fileID: 0}
   WeaponIcon: {fileID: 0}
-  CrosshairDataDefault:
-    CrosshairSprite: {fileID: 0}
-    CrosshairSize: 0
-    CrosshairColor: {r: 0, g: 0, b: 0, a: 0}
-  CrosshairDataTargetInSight:
-    CrosshairSprite: {fileID: 0}
-    CrosshairSize: 0
-    CrosshairColor: {r: 0, g: 0, b: 0, a: 0}
+  CrosshairDataDefault: {fileID: 0}
   WeaponRoot: {fileID: 8815063736924141185}
   WeaponMuzzle: {fileID: 2096565386399891227}
-  ShootType: 1
   ProjectilePrefab: {fileID: 8924682559891268397, guid: ec753d54f333bb944b8b04884ad63828,
     type: 3}
   DelayBetweenShots: 0.8
@@ -780,6 +772,7 @@ MonoBehaviour:
   BulletsPerShot: 1
   RecoilForce: 1
   AimZoomRatio: 1
+  ShootRange: 1000
   AimOffset: {x: 0, y: 0, z: 0}
   AutomaticReload: 1
   HasPhysicalBullets: 0

@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f059d3d9b2606f64c8fb5b8e6b7ec20f, type: 3}
-  m_Name: ShotBlue
+  m_Script: {fileID: 11500000, guid: 0f2d96c3b7203d1429f8e93e83612ee9, type: 3}
+  m_Name: DamageGreen
   m_EditorClassIdentifier: 
-  Type: 1
+  damage: 7
+  comboDamage: 14
+  OnComboAchieved: {fileID: 11400000, guid: 4d416948bae34424db0a1e0fa9633ce3, type: 2}

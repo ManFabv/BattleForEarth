@@ -47,7 +47,7 @@ namespace Unity.FPS.Gameplay
         public bool InheritWeaponVelocity = false;
 
         [Header("Damage")] [Tooltip("Damage of the projectile")]
-        public float Damage = 40f;
+        public DamageTypeConfig Damage;
 
         [Tooltip("Area of damage. Keep empty if you don<t want area damage")]
         public DamageArea AreaOfDamage;
@@ -214,8 +214,13 @@ namespace Unity.FPS.Gameplay
             // damage
             if (AreaOfDamage)
             {
+                DamageTypeConfig vulnerability = null;
+                if (collider.GetComponent<Damageable>() is Damageable damageable)
+                {
+                    vulnerability = damageable.vulnerabilityConfig;
+                }
                 // area damage
-                AreaOfDamage.InflictDamageInArea(Damage, point, HittableLayers, k_TriggerInteraction, m_ProjectileBase.Owner);
+                AreaOfDamage.InflictDamageInArea(Damage.CalculateDamage(vulnerability), point, HittableLayers, k_TriggerInteraction, m_ProjectileBase.Owner);
             }
             else
             {
@@ -223,7 +228,7 @@ namespace Unity.FPS.Gameplay
                 Damageable damageable = collider.GetComponent<Damageable>();
                 if (damageable)
                 {
-                    damageable.InflictDamage(Damage, false, m_ProjectileBase.Owner);
+                    damageable.InflictDamage(Damage.CalculateDamage(damageable.vulnerabilityConfig), false, m_ProjectileBase.Owner);
                 }
             }
 

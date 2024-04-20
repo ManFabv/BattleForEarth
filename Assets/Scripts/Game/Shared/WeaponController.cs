@@ -5,43 +5,17 @@ using UnityEngine.Events;
 
 namespace Unity.FPS.Game
 {
-    public enum WeaponShootType
-    {
-        Manual,
-        Automatic,
-        Charge,
-    }
-
-    [System.Serializable]
-    public struct CrosshairData
-    {
-        [Tooltip("The image that will be used for this weapon's crosshair")]
-        public Sprite CrosshairSprite;
-
-        [Tooltip("The size of the crosshair image")]
-        public int CrosshairSize;
-
-        [Tooltip("The color of the crosshair image")]
-        public Color CrosshairColor;
-    }
-
     [RequireComponent(typeof(AudioSource))]
     public class WeaponController : MonoBehaviour
     {
         [Header("Information")] [Tooltip("The name that will be displayed in the UI for this weapon")]
         public string WeaponName;
 
-        [Tooltip("Shot Scriptable Object Config)")]
-        public ShotTypeConfig ShotConfig;
-
         [Tooltip("The image that will be displayed in the UI for this weapon")]
         public Sprite WeaponIcon;
 
         [Tooltip("Default data for the crosshair")]
-        public CrosshairData CrosshairDataDefault;
-
-        [Tooltip("Data for the crosshair when targeting an enemy")]
-        public CrosshairData CrosshairDataTargetInSight;
+        public ShotTypeConfig CrosshairDataDefault;
 
         [Header("Internal References")]
         [Tooltip("The root object for the weapon, this is what will be deactivated when the weapon isn't active")]
@@ -49,9 +23,6 @@ namespace Unity.FPS.Game
 
         [Tooltip("Tip of the weapon, where the projectiles are shot")]
         public Transform WeaponMuzzle;
-
-        [Header("Shoot Parameters")] [Tooltip("The type of weapon will affect how it shoots")]
-        public WeaponShootType ShootType;
 
         [Tooltip("The projectile prefab")] public ProjectileBase ProjectilePrefab;
 
@@ -69,6 +40,10 @@ namespace Unity.FPS.Game
 
         [Tooltip("Ratio of the default FOV that this weapon applies while aiming")] [Range(0f, 1f)]
         public float AimZoomRatio = 1f;
+
+        [Tooltip("How far the weapon can affect enemies")]
+        [Range(0f, 10000f)]
+        public float ShootRange = 1000f;
 
         [Tooltip("Translation to apply to weapon arm when aiming with this weapon")]
         public Vector3 AimOffset;
@@ -172,7 +147,7 @@ namespace Unity.FPS.Game
         public float CurrentCharge { get; private set; }
         public Vector3 MuzzleWorldVelocity { get; private set; }
 
-        public float GetAmmoNeededToShoot() => (ShootType != WeaponShootType.Charge ? 1f : Mathf.Max(1f, AmmoUsedOnStartCharge)) / (MaxAmmo * BulletsPerShot);
+        public float GetAmmoNeededToShoot() => (CrosshairDataDefault.IsChargeWeapon ? 1f : Mathf.Max(1f, AmmoUsedOnStartCharge)) / (MaxAmmo * BulletsPerShot);
 
         public int GetCarriedPhysicalBullets() => m_CarriedPhysicalBullets;
         public int GetCurrentAmmo() => Mathf.FloorToInt(CurrentAmmo);
@@ -383,9 +358,9 @@ namespace Unity.FPS.Game
         public bool HandleShootInputs(bool inputDown, bool inputHeld, bool inputUp)
         {
             m_WantsToShoot = inputDown || inputHeld;
-            switch (ShootType)
+            switch (CrosshairDataDefault.ShootType)
             {
-                case WeaponShootType.Manual:
+                case ShotTypeConfig.WeaponShootType.Manual:
                     if (inputDown)
                     {
                         return TryShoot();
@@ -393,7 +368,7 @@ namespace Unity.FPS.Game
 
                     return false;
 
-                case WeaponShootType.Automatic:
+                case ShotTypeConfig.WeaponShootType.Automatic:
                     if (inputHeld)
                     {
                         return TryShoot();
@@ -401,7 +376,7 @@ namespace Unity.FPS.Game
 
                     return false;
 
-                case WeaponShootType.Charge:
+                case ShotTypeConfig.WeaponShootType.Charge:
                     if (inputHeld)
                     {
                         TryBeginCharge();
@@ -465,7 +440,7 @@ namespace Unity.FPS.Game
 
         void HandleShoot()
         {
-            int bulletsPerShotFinal = ShootType == WeaponShootType.Charge ? Mathf.CeilToInt(CurrentCharge * BulletsPerShot) : BulletsPerShot;
+            int bulletsPerShotFinal = CrosshairDataDefault.IsChargeWeapon ? Mathf.CeilToInt(CurrentCharge * BulletsPerShot) : BulletsPerShot;
 
             // spawn all bullets with random direction
             for (int i = 0; i < bulletsPerShotFinal; i++)
