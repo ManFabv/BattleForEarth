@@ -27,7 +27,7 @@ public class ComboBarConfig : ScriptableObject
 
     public int CalculateComboIncrement(DamageTypeConfig vulnerability) => (vulnerability != null && vulnerability == DamageTypeConfig) ? ValueToIncrementOnCombo : 0;
 
-    public bool IsBarFull(Slider comboBarSlider) => (comboBarSlider.value >= MaxComboValue);
+    public bool IsBarFull(float value) => (value >= MaxComboValue);
 
     public void RaiseOnBarFull()
     {
