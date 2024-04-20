@@ -10,6 +10,9 @@ namespace Unity.FPS.Game
         [Range(0, 1)] [Tooltip("Multiplier to apply to self damage")]
         public float SensibilityToSelfdamage = 0.5f;
 
+        [Tooltip("Config from where we are going to take damage and vulnerability type")]
+        public DamageTypeConfig vulnerabilityConfig;
+
         public Health Health { get; private set; }
 
         void Awake()
