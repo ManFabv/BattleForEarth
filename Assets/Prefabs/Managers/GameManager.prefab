@@ -643,6 +643,12 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1315839542190839937}
     m_Modifications:
+    - target: {fileID: 258137110122184379, guid: 7ff14361843237d43afc85e1cb16e295,
+        type: 3}
+      propertyPath: comboBarConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: f518f10d15f42ef4e99b150713f0ba3a,
+        type: 2}
     - target: {fileID: 2920967930101488164, guid: 7ff14361843237d43afc85e1cb16e295,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -685,6 +691,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21649359081121634, guid: 106dddce1f2404b45bbfa40eab1b84ea,
         type: 2}
+    - target: {fileID: 3918730899818132561, guid: 7ff14361843237d43afc85e1cb16e295,
+        type: 3}
+      propertyPath: comboBarConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 0262da7302bb4aa4aaf255407340e9e4,
+        type: 2}
     - target: {fileID: 4019959137940254900, guid: 7ff14361843237d43afc85e1cb16e295,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -703,6 +715,11 @@ PrefabInstance:
     - target: {fileID: 4019959137940254900, guid: 7ff14361843237d43afc85e1cb16e295,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730848998153733036, guid: 7ff14361843237d43afc85e1cb16e295,
+        type: 3}
+      propertyPath: m_FillAmount
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4863125819987826148, guid: 7ff14361843237d43afc85e1cb16e295,
@@ -798,6 +815,16 @@ PrefabInstance:
     - target: {fileID: 7730855410354769530, guid: 7ff14361843237d43afc85e1cb16e295,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8202736506323863205, guid: 7ff14361843237d43afc85e1cb16e295,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381318415928478022, guid: 7ff14361843237d43afc85e1cb16e295,
+        type: 3}
+      propertyPath: m_FillAmount
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:

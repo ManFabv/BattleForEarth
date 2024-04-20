@@ -15,9 +15,6 @@ namespace Unity.FPS.Gameplay
         [Range(0f, 1f)]
         public float LookAtForwardSmoothTime = 0.1f;
 
-        //TODO: example of event
-        //public UnityAction<bool> OnStanceChanged;
-
         public bool IsDead { get; private set; }
         
         [HideInInspector, SerializeField, Self] Health m_Health;
