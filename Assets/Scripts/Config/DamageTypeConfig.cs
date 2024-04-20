@@ -26,7 +26,7 @@ public class DamageTypeConfig :  ScriptableObject
             //if we get a combo, we trigger an event
             if(OnComboAchieved != null)
             {
-                OnComboAchieved.RaiseGameplayEvent();
+                OnComboAchieved.RaiseGameplayEvent(targetVulnerability);
             }
         }
 
