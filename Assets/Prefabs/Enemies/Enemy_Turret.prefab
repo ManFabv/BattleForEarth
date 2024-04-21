@@ -690,13 +690,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponName: mg
   WeaponIcon: {fileID: 0}
-  CrosshairDataDefault: {fileID: 0}
+  CrosshairDataDefault: {fileID: 11400000, guid: cc1dd5b65b4b6c54782e3e0ecc41f4de,
+    type: 2}
+  DamageTypeConfig: {fileID: 11400000, guid: 9b0ad2dbff3654f478ac11442cce1d68, type: 2}
   WeaponRoot: {fileID: 8815063736924141185}
   WeaponMuzzle: {fileID: 2096565386399891227}
   ProjectilePrefab: {fileID: 8924682559891268397, guid: 154bfb4989fe16d439e8f3fb7c20b72b,
     type: 3}
-  DelayBetweenShots: 0.06
-  BulletSpreadAngle: 0
+  DelayBetweenShots: 1
+  BulletSpreadAngle: 10
   BulletsPerShot: 1
   RecoilForce: 1
   AimZoomRatio: 1
@@ -881,7 +883,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.64177275, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
