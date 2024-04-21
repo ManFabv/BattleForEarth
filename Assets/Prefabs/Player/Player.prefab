@@ -530,6 +530,7 @@ GameObject:
   - component: {fileID: 1272397862697293493}
   - component: {fileID: 7292978499713446800}
   - component: {fileID: 8513800275300331763}
+  - component: {fileID: 2872080023988201644}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -645,6 +646,7 @@ MonoBehaviour:
     m_Bits: 1024
   smoothLookAtRotationSpeed: 1
   smoothAimingAtRotationSpeed: 10
+  OnPowerupActivated: {fileID: 0}
   m_InputHandler: {fileID: 6145509692674227223}
   m_PlayerCharacterController: {fileID: 814417836257332542}
 --- !u!143 &3122855503829242450
@@ -832,7 +834,48 @@ MonoBehaviour:
     type: 2}
   onEventRaised:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 298744117520805562}
+        m_TargetAssemblyTypeName: Unity.FPS.Gameplay.PlayerWeaponsManager, fps.Gameplay
+        m_MethodName: OnComboAchieved
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2872080023988201644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7253983127304857660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0184dbd10d62b6848a3b4c9499bff38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <gameplayEventConfig>k__BackingField: {fileID: 11400000, guid: 6015b1e23a7b0004c98788b115984500,
+    type: 2}
+  onEventRaised:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 298744117520805562}
+        m_TargetAssemblyTypeName: Unity.FPS.Gameplay.PlayerWeaponsManager, fps.Gameplay
+        m_MethodName: OnComboBarActivated
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7383874627095517793
 GameObject:
   m_ObjectHideFlags: 0

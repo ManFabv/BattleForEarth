@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using KBCore.Refs;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.Events;
@@ -106,10 +107,21 @@ namespace Unity.FPS.Gameplay
         Vector3 cameraUp => m_PlayerCharacterController.PlayerCamera.transform.up;
         Vector3 cameraRight => m_PlayerCharacterController.PlayerCamera.transform.right;
 
+        Dictionary<DamageTypeConfig, ComboBarController> m_comboBarControllers = new Dictionary<DamageTypeConfig, ComboBarController>();
+
         private void Awake()
         {
             m_DollyCart = GameObject.FindObjectOfType<CinemachineDollyCart>();
             DebugUtility.HandleErrorIfNullFindObject<CinemachineDollyCart, PlayerWeaponsManager>(m_DollyCart, this);
+
+            ComboBarController[] comboBarControllers = GameObject.FindObjectsOfType<ComboBarController>();
+            DebugUtility.HandleErrorIfArrayNullFindObject<ComboBarController[], PlayerWeaponsManager>(comboBarControllers, this);
+
+            //we add every combo bar controller to a dictionary so we can access them easily later on the code
+            foreach (ComboBarController comboBarController in comboBarControllers)
+            {
+                m_comboBarControllers[comboBarController.comboBarConfig.DamageTypeConfig] = comboBarController;
+            }
 
             // TODO: this should be taken from each dolly cart point which will tell us the limits from the
             // current part of the path (to avoid going through building on tunnels, for instance)
@@ -151,6 +163,43 @@ namespace Unity.FPS.Gameplay
             HandleAiming();
 
             HandleMoving();
+
+            HandlePowerUpActivation();
+        }
+
+        private void HandlePowerUpActivation()
+        {
+            WeaponController activeWeapon = GetActiveWeapon();
+            if(activeWeapon == null)
+            {
+                return;
+            }
+
+            //TODO: improve this by using a fire config as scriptable object
+            bool isActivatingFirst = m_InputHandler.IsActivatingPowerupAtIndex(0);
+            bool isActivatingSecond = m_InputHandler.IsActivatingPowerupAtIndex(1);
+            if (isActivatingFirst)
+            {
+                var weaponAtSlot = GetWeaponAtSlotIndex(0);
+                var damageType = weaponAtSlot.DamageTypeConfig;
+                m_comboBarControllers[damageType].TryToActivate(activeWeapon.DamageTypeConfig);
+            }
+            else if (isActivatingSecond)
+            {
+                var weaponAtSlot = GetWeaponAtSlotIndex(1);
+                var damageType = weaponAtSlot.DamageTypeConfig;
+                m_comboBarControllers[damageType].TryToActivate(activeWeapon.DamageTypeConfig);
+            }
+        }
+
+        public void OnComboAchieved(DamageTypeConfig vulnerability)
+        {
+            //TODO: we can implement some VFX here
+        }
+
+        public void OnComboBarActivated(DamageTypeConfig vulnerability)
+        {
+            //TODO: we can implement some VFX here
         }
 
         private void HandleMoving()

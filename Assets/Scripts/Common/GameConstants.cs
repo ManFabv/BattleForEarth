@@ -38,5 +38,17 @@
            "Gamepad Fire",
            "Gamepad Fire Second",
         };
+        //Power up buttons
+        public static readonly string[] k_PowerupButtonName =
+        {
+           "Activate First Power Up",
+           "Activate Second Power Up",
+        };
+        // Power up gamepad buttons
+        public static readonly string[] k_PowerupGamepadButtonName =
+        {
+           "Gamepad Activate First Power Up",
+           "Gamepad Activate Second Power Up",
+        };
     }
 }

@@ -17,6 +17,9 @@ namespace Unity.FPS.Game
         [Tooltip("Default data for the crosshair")]
         public ShotTypeConfig CrosshairDataDefault;
 
+        [Tooltip("Default damage type for the weapon")]
+        public DamageTypeConfig DamageTypeConfig;
+
         [Header("Internal References")]
         [Tooltip("The root object for the weapon, this is what will be deactivated when the weapon isn't active")]
         public GameObject WeaponRoot;

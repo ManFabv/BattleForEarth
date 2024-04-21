@@ -40,6 +40,8 @@ namespace Unity.FPS.Gameplay
 
         private bool IsNotValidInputIndex(int index) => !GameConstants.k_FireButtonName.IsIndexValid(index) || !GameConstants.k_FireGamepadButtonName.IsIndexValid(index);
 
+        private bool IsNotValidPowerupInputIndex(int index) => !GameConstants.k_PowerupButtonName.IsIndexValid(index) || !GameConstants.k_PowerupGamepadButtonName.IsIndexValid(index);
+
         void Start()
         {
             m_GameFlowManager = FindObjectOfType<GameFlowManager>();
@@ -229,7 +231,7 @@ namespace Unity.FPS.Gameplay
 
                 if (isGamepad)
                 {
-                    // since mouse input is already deltaTime-dependant, only scale input with frame time if it's coming from sticks
+                    // since mouse input is already deltaTime-dependent, only scale input with frame time if it's coming from sticks
                     i *= Time.deltaTime;
                 }
                 else
@@ -246,6 +248,16 @@ namespace Unity.FPS.Gameplay
             }
 
             return 0f;
+        }
+
+        public bool IsActivatingPowerupAtIndex(int index)
+        {
+            if (IsNotValidPowerupInputIndex(index))
+            {
+                return false;
+            }
+
+            return Input.GetButtonDown(GameConstants.k_PowerupButtonName[index]) || Input.GetButtonDown(GameConstants.k_PowerupGamepadButtonName[index]);
         }
     }
 }

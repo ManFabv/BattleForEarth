@@ -12,6 +12,8 @@ public class ComboBarController : ValidatedMonoBehaviour
 
     private ComboBarModel Model = new ComboBarModel();
 
+    private bool IsBarFullAndReady(DamageTypeConfig vulnerability) => Model.IsWaitingForActivation && comboBarConfig.AreEqualDamageType(vulnerability);
+
     private void Start()
     {
         View.Setup(comboBarConfig.MaxComboValue, comboBarConfig.ShotTypeConfig.CrosshairColor, comboBarConfig.Icon);
@@ -22,7 +24,7 @@ public class ComboBarController : ValidatedMonoBehaviour
         View.IncrementSlider(comboBarConfig.CalculateComboIncrement(vulnerability));
 
         //if the bar was already full, then we are waiting the player to activate the power up, we don't do anything else
-        if(Model.IsWaitingForActivation)
+        if(Model.IsWaitingForActivation || !comboBarConfig.AreEqualDamageType(vulnerability))
         {
             return;
         }
@@ -38,11 +40,38 @@ public class ComboBarController : ValidatedMonoBehaviour
     {
         //TODO: here we can activate an effect on the UI
 
-        Model.IsWaitingForActivation = true; //bar can now be activated
+        if(comboBarConfig.AreEqualDamageType(vulnerability))
+        {
+            Model.IsWaitingForActivation = true; //bar can now be activated
+        }
     }
 
-    //TODO: create a new GameplayEventConfig for activating a power up and on the player controller we
-    //trigger the event passing the damage type as an argument. If the damage type is equals to this
-    // combo bar and we have the Model.IsWaitingForActivation == true, we can activate the power up
-    // and reset the slider and Model.IsWaitingForActivation = false
+    public void OnActivationIntent(DamageTypeConfig vulnerability)
+    {
+        //if the bar is ready (full) and we they are the same damage type
+        if(IsBarFullAndReady(vulnerability))
+        {
+            comboBarConfig.RiseOnActivated(vulnerability);
+        }
+    }
+
+    public void OnComboBarActivated(DamageTypeConfig vulnerability)
+    {
+        //TODO: we can add another vfx here
+
+        if (comboBarConfig.AreEqualDamageType(vulnerability))
+        {
+            Model.IsWaitingForActivation = false;
+            View.ResetBar();
+        }
+    }
+
+    public void TryToActivate(DamageTypeConfig vulnerability)
+    {
+        //if the bar is ready (full) and we they are the same damage type
+        if (IsBarFullAndReady(vulnerability))
+        {
+            comboBarConfig.RiseOnActivationIntent(vulnerability);
+        }
+    }
 }

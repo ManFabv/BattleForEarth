@@ -31,5 +31,11 @@ public class ComboBarView : ValidatedMonoBehaviour
         barSlider.value += increment;
     }
 
+    public void ResetBar()
+    {
+        //TODO: we can do a tween to decrease this over time and not to abrupt on the UI
+        barSlider.value = 0;
+    }
+
     public float SliderValue => barSlider.value;
 }

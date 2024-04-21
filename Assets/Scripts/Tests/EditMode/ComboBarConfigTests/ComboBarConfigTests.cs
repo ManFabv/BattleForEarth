@@ -52,4 +52,27 @@ public class ComboBarConfigTests
 
         Assert.AreEqual(_normalIncrement, increment);
     }
+
+    [Test]
+    public void AreEqualDamageType_WhenTargetIsVulnerable_ReturnsTrue()
+    {
+        DamageTypeConfig targetDamageTypeConfig = ScriptableObject.CreateInstance<DamageTypeConfig>();
+        _comboBarConfig.OverrideDamageTypeConfig(targetDamageTypeConfig);
+
+        Assert.IsTrue(_comboBarConfig.AreEqualDamageType(targetDamageTypeConfig));
+    }
+
+    [Test]
+    public void AreEqualDamageType_WhenTargetIsNotVulnerable_ReturnsFalse()
+    {
+        DamageTypeConfig targetDamageTypeConfig = ScriptableObject.CreateInstance<DamageTypeConfig>();
+
+        Assert.IsFalse(_comboBarConfig.AreEqualDamageType(targetDamageTypeConfig));
+    }
+
+    [Test]
+    public void AreEqualDamageType_WhenTargetIsNull_ReturnsFalse()
+    {
+        Assert.IsFalse(_comboBarConfig.AreEqualDamageType(null));
+    }
 }

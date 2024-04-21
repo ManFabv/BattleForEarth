@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 5824343274206491802}
   - component: {fileID: 281660654049293142}
   - component: {fileID: 2648071432068638271}
+  - component: {fileID: 8309923655204300205}
+  - component: {fileID: 4853699891524145024}
   m_Layer: 5
   m_Name: ComboBar
   m_TagString: Untagged
@@ -172,6 +174,64 @@ MonoBehaviour:
       - m_Target: {fileID: 5196290338205062404}
         m_TargetAssemblyTypeName: ComboBarController, fps.UI
         m_MethodName: OnBarFull
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8309923655204300205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4376850379127521484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0184dbd10d62b6848a3b4c9499bff38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <gameplayEventConfig>k__BackingField: {fileID: 11400000, guid: 198f5dce00a897142a111689735fbf1f,
+    type: 2}
+  onEventRaised:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5196290338205062404}
+        m_TargetAssemblyTypeName: ComboBarController, fps.UI
+        m_MethodName: OnActivationIntent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4853699891524145024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4376850379127521484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0184dbd10d62b6848a3b4c9499bff38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <gameplayEventConfig>k__BackingField: {fileID: 11400000, guid: 6015b1e23a7b0004c98788b115984500,
+    type: 2}
+  onEventRaised:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5196290338205062404}
+        m_TargetAssemblyTypeName: ComboBarController, fps.UI
+        m_MethodName: OnComboBarActivated
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
