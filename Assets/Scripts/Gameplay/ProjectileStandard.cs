@@ -225,10 +225,13 @@ namespace Unity.FPS.Gameplay
             else
             {
                 // point damage
-                Damageable damageable = collider.GetComponent<Damageable>();
-                if (damageable)
+                if (collider != null)
                 {
-                    damageable.InflictDamage(Damage.CalculateDamage(damageable.vulnerabilityConfig), false, m_ProjectileBase.Owner);
+                    Damageable damageable = collider.GetComponent<Damageable>();
+                    if (damageable != null)
+                    {
+                        damageable.InflictDamage(Damage.CalculateDamage(damageable.vulnerabilityConfig), false, m_ProjectileBase.Owner);
+                    }
                 }
             }
 

@@ -19,7 +19,12 @@ public class DamageTypeConfig :  ScriptableObject
     {
         float calculatedDamage = damage;
 
-        if(targetVulnerability == this)
+        if (targetVulnerability == null)
+        {
+            return calculatedDamage;
+        }
+
+        if (targetVulnerability == this)
         {
             calculatedDamage = comboDamage;
 
