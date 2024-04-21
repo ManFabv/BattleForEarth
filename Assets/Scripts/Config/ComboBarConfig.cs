@@ -19,15 +19,26 @@ public class ComboBarConfig : ScriptableObject
 
     [field: SerializeField]
     public Sprite Icon { get; private set; }
+
     [Tooltip("Event to trigger when bar is full")]
     [SerializeField]
     private GameplayEventsConfig OnBarFull;
+
+    [Tooltip("Event to trigger when we try to activate the combo bar")]
+    [SerializeField]
+    private GameplayEventsConfig OnActivationIntent;
+
+    [Tooltip("Event to trigger when we activated the combo bar")]
+    [SerializeField]
+    private GameplayEventsConfig OnActivated;
 
     public void OverrideDamageTypeConfig(DamageTypeConfig newDamageTypeConfig) => DamageTypeConfig = newDamageTypeConfig;
 
     public int CalculateComboIncrement(DamageTypeConfig vulnerability) => (vulnerability != null && vulnerability == DamageTypeConfig) ? ValueToIncrementOnCombo : 0;
 
-    public bool IsBarFull(Slider comboBarSlider) => (comboBarSlider.value >= MaxComboValue);
+    public bool IsBarFull(float value) => (value >= MaxComboValue);
+
+    public bool AreEqualDamageType(DamageTypeConfig vulnerability) => (vulnerability != null && vulnerability == DamageTypeConfig);
 
     public void RaiseOnBarFull()
     {
@@ -35,6 +46,22 @@ public class ComboBarConfig : ScriptableObject
         if (OnBarFull != null)
         {
             OnBarFull.RaiseGameplayEvent(DamageTypeConfig);
+        }
+    }
+
+    public void RiseOnActivationIntent(DamageTypeConfig vulnerability)
+    {
+        if (OnActivationIntent != null)
+        {
+            OnActivationIntent.RaiseGameplayEvent(DamageTypeConfig);
+        }
+    }
+
+    public void RiseOnActivated(DamageTypeConfig vulnerability)
+    {
+        if(OnActivated != null)
+        {
+            OnActivated.RaiseGameplayEvent(vulnerability);
         }
     }
 }
