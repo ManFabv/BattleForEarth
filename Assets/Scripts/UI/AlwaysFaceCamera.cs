@@ -7,6 +7,14 @@ public class AlwaysFaceCamera : ValidatedMonoBehaviour
 
     [HideInInspector, SerializeField, Self] Transform _cachedTransform;
 
+    private void Awake()
+    {
+        if(_facingCamera == null)
+        {
+            _facingCamera = Camera.main;
+        }
+    }
+
     private void LateUpdate()
     {
         _cachedTransform.LookAt(_facingCamera.transform.position);
