@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class TransformExtensionMethods
 {
@@ -37,19 +38,19 @@ public static class TransformExtensionMethods
         Vector3 bottomLeftLocal = camera.CameraBottomLeftLocalSpace(distance);
         Vector3 topRightLocal = camera.CameraTopRightLocalSpace(distance);
         //we get the renderer of the object if it exists
-        Renderer objectToClampRenderer = objectToClamp.GetComponentInChildren<Renderer>();
+        Image objectToClampImage = objectToClamp.GetComponentInChildren<Image>();
         //we calculate the bounds size if it exists
-        Vector3 objectToClampRendererBoundsSize = objectToClampRenderer.GetRendererBoundsSize();
+        Vector3 objectToClampRendererBoundsSize = objectToClampImage.GetImageHalfBoundsSizeInWorldUnits();
         //we save the local position of the object
         Vector3 newLocalPosition = objectToClamp.localPosition;
         //we calculate the limits taking into account the camera position and the size of the object to clamp
-        float minX = bottomLeftLocal.x + cameraLocalPosition.x + objectToClampRendererBoundsSize.x;
-        float maxX = topRightLocal.x + cameraLocalPosition.x - objectToClampRendererBoundsSize.x;
-        float minY = bottomLeftLocal.y + cameraLocalPosition.y - objectToClampRendererBoundsSize.y;
-        float maxY = topRightLocal.y + cameraLocalPosition.y - objectToClampRendererBoundsSize.y;
+        float leftBorderX = bottomLeftLocal.x + cameraLocalPosition.x + objectToClampRendererBoundsSize.x;
+        float rightBorderX = topRightLocal.x + cameraLocalPosition.x - objectToClampRendererBoundsSize.x;
+        float bottomBorderY = bottomLeftLocal.y + cameraLocalPosition.y - objectToClampRendererBoundsSize.y;
+        float topBorderY = topRightLocal.y + cameraLocalPosition.y - objectToClampRendererBoundsSize.y;
         //we are going to calculate the new local position but clamped to be inside screen bounds
-        newLocalPosition.x = Mathf.Clamp(newLocalPosition.x, minX, maxX);
-        newLocalPosition.y = Mathf.Clamp(newLocalPosition.y, minY, maxY);
+        newLocalPosition.x = Mathf.Clamp(newLocalPosition.x, leftBorderX, rightBorderX);
+        newLocalPosition.y = Mathf.Clamp(newLocalPosition.y, bottomBorderY, topBorderY);
         //we update the local position
         objectToClamp.localPosition = newLocalPosition;
     }
