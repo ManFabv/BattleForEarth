@@ -12,17 +12,17 @@ public static class RendererExtensionMethods
         return objectToClampRendererBounds.size / parentCanvas.scaleFactor;
     }
 
-    public static Vector3 GetImageBoundsSizeInWorldUnits(this Image image)
+    public static Vector3 GetImageBoundsSizeInWorldUnits(this Image image, CanvasScaler parentCanvasScaler)
     {
-        if (image == null || image.sprite == null) return Vector3.zero;  //we return zero if the object is null
+        if (image == null || image.sprite == null || parentCanvasScaler == null) return Vector3.zero;  //we return zero if the object is null
         //we calculate the bounds
         Bounds objectToClampRendererBounds = image.sprite.bounds;
         //we return the size
-        return objectToClampRendererBounds.extents;
+        return (image.rectTransform.sizeDelta * image.pixelsPerUnitMultiplier) / parentCanvasScaler.referencePixelsPerUnit;
     }
 
-    public static Vector3 GetImageHalfBoundsSizeInWorldUnits(this Image image)
+    public static Vector3 GetImageHalfBoundsSizeInWorldUnits(this Image image, CanvasScaler parentCanvasScaler)
     {
-        return GetImageBoundsSizeInWorldUnits(image) / 2;
+        return GetImageBoundsSizeInWorldUnits(image, parentCanvasScaler) / 2;
     }
 }

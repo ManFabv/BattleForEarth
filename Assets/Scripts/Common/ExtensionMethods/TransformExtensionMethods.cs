@@ -37,10 +37,12 @@ public static class TransformExtensionMethods
         //we convert the screen bounds to local space which we want to move
         Vector3 bottomLeftLocal = camera.CameraBottomLeftLocalSpace(distance);
         Vector3 topRightLocal = camera.CameraTopRightLocalSpace(distance);
-        //we get the renderer of the object if it exists
+        //we get the image of the object if it exists
         Image objectToClampImage = objectToClamp.GetComponentInChildren<Image>();
-        //we calculate the bounds size if it exists
-        Vector3 objectToClampRendererBoundsSize = objectToClampImage.GetImageHalfBoundsSizeInWorldUnits();
+        //we get the canvas scaler of the object if it exists
+        CanvasScaler objectToClampCanvasScaler = objectToClamp.GetComponentInChildren<CanvasScaler>();
+        //we calculate the half size if it exists
+        Vector3 objectToClampRendererBoundsSize = objectToClampImage.GetImageHalfBoundsSizeInWorldUnits(objectToClampCanvasScaler);
         //we save the local position of the object
         Vector3 newLocalPosition = objectToClamp.localPosition;
         //we calculate the limits taking into account the camera position and the size of the object to clamp
