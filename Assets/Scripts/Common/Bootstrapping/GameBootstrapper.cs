@@ -16,6 +16,15 @@ namespace Assets.Scripts.Common.Bootstrapping
             //TODO: implement VContainer and MessagePipe initialization
             //this is called only once per execution of the game so
             //we don't need any extra logic to avoid more than one initialization
+            
+            ActivateVariableRefreshRateSupport();
+        }
+
+        private static void ActivateVariableRefreshRateSupport()
+        {
+            Application.targetFrameRate = -1;
+            QualitySettings.vSyncCount = 0;
+            Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
         }
 
         private static bool IsRunningTests()
