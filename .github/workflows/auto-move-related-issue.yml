@@ -1,0 +1,14 @@
+name: "Auto move related issue"
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  auto-move-related-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: 1natsu172/github-action-auto-move-related-issue@v1
+        id: auto-move-related-issue_action
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          config: "auto-move-related-issue-config.yml"
