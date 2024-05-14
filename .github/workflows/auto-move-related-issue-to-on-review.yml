@@ -1,0 +1,16 @@
+name: Move Issue to On Review
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  move-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Move issue to On Review
+        uses: alex-page/github-project-automation-plus@v0.9.0
+        with:
+          project: "BattleForEarth"
+          column: "On Review"
+          repo-token: ${{ secrets.GHPROJECT_TOKEN }}
