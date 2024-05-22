@@ -42,6 +42,7 @@ MonoBehaviour:
     - com.cysharp.messagepipe.vcontainer
     - com.cysharp.unitask
     - com.febucci.custom-hierarchy
+    - com.handzlikchris.fastscriptreload
     - com.kylewbanks.scenerefattribute
     - com.littlebigfun.addressable-importer
     - com.neuecc.unirx
