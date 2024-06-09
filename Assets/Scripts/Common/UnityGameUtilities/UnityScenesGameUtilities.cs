@@ -13,11 +13,15 @@ namespace Assets.Scripts.Common.UnityGameUtilities
         /// <returns>list of the scene names that are enabled on build</returns>
         public static IEnumerable<string> GetAllActiveSceneNamesInBuild()
         {
+#if UNITY_EDITOR
             IEnumerable<string> scenes = EditorBuildSettings.scenes
                 .Where(scene => scene.enabled)
                 .Select(scene => scene.path);
 
             return scenes ?? new List<string>();
+#else
+            return new List<string>(); \\TODO: we should return something else for runtime?
+#endif
         }
 
         /// <summary>
