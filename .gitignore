@@ -63,3 +63,9 @@ crashlytics-build.properties
 
 .vsconfig
 UserSettings
+.sonarqube
+combined-tests
+combined-coverage
+editmode.log
+playmode.log
+pvs-report.sarif

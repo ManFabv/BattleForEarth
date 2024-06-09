@@ -28,13 +28,6 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "com.handzlikchris.fastscriptreload": {
-      "version": "1.6.1",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
     "com.kylewbanks.scenerefattribute": {
       "version": "0.12.1",
       "depth": 0,

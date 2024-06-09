@@ -52,8 +52,7 @@
     "com.unity.modules.unitywebrequestwww": "1.0.0",
     "com.unity.modules.vehicles": "1.0.0",
     "com.unity.modules.video": "1.0.0",
-    "com.unity.modules.wind": "1.0.0",
-    "com.handzlikchris.fastscriptreload": "1.6.1"
+    "com.unity.modules.wind": "1.0.0"
   },
   "scopedRegistries": [
     {
@@ -71,7 +70,6 @@
         "com.cysharp.messagepipe.vcontainer",
         "com.cysharp.unitask",
         "com.febucci.custom-hierarchy",
-        "com.handzlikchris.fastscriptreload",
         "com.kylewbanks.scenerefattribute",
         "com.littlebigfun.addressable-importer",
         "com.neuecc.unirx",
