@@ -32,19 +32,19 @@
            "Fire",
            "Fire Second",
         };
-        // Fire gamepad buttons
+        //TODO: Fire gamepad buttons
         public static readonly string[] k_FireGamepadButtonName =
         {
            "Gamepad Fire",
            "Gamepad Fire Second",
         };
-        //Power up buttons
+        //TODO: Power up buttons
         public static readonly string[] k_PowerupButtonName =
         {
            "Activate First Power Up",
            "Activate Second Power Up",
         };
-        // Power up gamepad buttons
+        //TODO: Power up gamepad buttons
         public static readonly string[] k_PowerupGamepadButtonName =
         {
            "Gamepad Activate First Power Up",
