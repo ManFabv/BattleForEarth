@@ -20,7 +20,7 @@ namespace Assets.Scripts.Common.UnityGameUtilities
 
             return scenes ?? new List<string>();
 #else
-            return new List<string>(); \\TODO: we should return something else for runtime?
+            return new List<string>(); //TODO: we should return something else for runtime?
 #endif
         }
 
