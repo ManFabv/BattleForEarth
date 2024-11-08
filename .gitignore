@@ -69,3 +69,5 @@ combined-coverage
 editmode.log
 playmode.log
 pvs-report.sarif
+.idea
+.vscode
