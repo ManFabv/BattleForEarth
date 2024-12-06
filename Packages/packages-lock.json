@@ -21,13 +21,6 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "com.febucci.custom-hierarchy": {
-      "version": "1.2.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
     "com.kylewbanks.scenerefattribute": {
       "version": "0.12.1",
       "depth": 0,
