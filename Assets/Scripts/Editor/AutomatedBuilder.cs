@@ -17,7 +17,8 @@ namespace AutomatedBuilder
         public static void BuildWin64()
         {
             string buildName = PlayerSettings.productName + ".exe";
-            Build(BuildTarget.StandaloneWindows64, BuildTargetGroup.Standalone, BuildOptions.None, buildName);
+            // TODO: clean build cache should be modified by command line args??
+            Build(BuildTarget.StandaloneWindows64, BuildTargetGroup.Standalone, BuildOptions.CleanBuildCache | BuildOptions.StrictMode, buildName);
         }
 
 #region Generic Build Method
@@ -26,11 +27,12 @@ namespace AutomatedBuilder
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = GetActiveScenesList(),
-                locationPathName = Path.Combine(GetOutputPathFromEnvironment(), buildName),
+                locationPathName = GetOutputPathFromEnvironment(OUTPUT_PATH_PARAMETER_KEY, buildName),
                 target = buildTarget,
                 options = buildOptions
             };
 
+            // TODO: obsoleted
             PlayerSettings.SetScriptingBackend(buildTargetGroup, ScriptingImplementation.IL2CPP);
             PlayerSettings.SetIl2CppCompilerConfiguration(buildTargetGroup, Il2CppCompilerConfiguration.Release);
 
@@ -50,7 +52,27 @@ namespace AutomatedBuilder
 #endregion
 
 #region Helper methods
-        private static string GetOutputPathFromEnvironment() => GetCommandLineArgument(OUTPUT_PATH_PARAMETER_KEY);
+        private static string GetOutputPathFromEnvironment(string outputEnvironmentKey, string buildName)
+        {
+            string outputPathArgument = GetCommandLineArgument(outputEnvironmentKey);
+            if (string.IsNullOrEmpty(outputPathArgument))
+            {
+                throw new ArgumentException("Path argument not found");
+            }
+
+            // DataPath is Asset folder, so we go one folder up with ..
+            string projectBasePath = Path.Combine(Application.dataPath, "../");
+            string fullPath = Path.Combine(projectBasePath, outputPathArgument);
+
+            string directory = Path.GetDirectoryName(fullPath);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+                Debug.Log($"Folder created: {directory}");
+            }
+
+            return Path.Combine(fullPath, buildName);
+        }
 
         private static string GetCommandLineArgument(string argument)
         {
