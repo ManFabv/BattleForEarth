@@ -1,5 +1,6 @@
 ﻿using System;
 
+// added some comments
 namespace Assets.Scripts.Common.Timer
 {
     public interface ITimerAction : IDisposable
