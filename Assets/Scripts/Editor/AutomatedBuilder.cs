@@ -32,7 +32,7 @@ namespace AutomatedBuilder
                 options = buildOptions
             };
 
-            // TODO: obsoleted
+            // TODO: obsoleted, we need to update this script
             PlayerSettings.SetScriptingBackend(buildTargetGroup, ScriptingImplementation.IL2CPP);
             PlayerSettings.SetIl2CppCompilerConfiguration(buildTargetGroup, Il2CppCompilerConfiguration.Release);
 
