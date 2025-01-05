@@ -1,2 +1,0 @@
-# BattleForEarth
-UNL Final Project
