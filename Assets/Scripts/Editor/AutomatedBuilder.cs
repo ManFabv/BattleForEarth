@@ -76,7 +76,7 @@ namespace AutomatedBuilder
 
         private static string GetCommandLineArgument(string argument)
         {
-            string argumentValue = "";
+            string argumentValue = string.Empty;
 
             for (var index = 0; index < arguments.Length; index++)
             {
