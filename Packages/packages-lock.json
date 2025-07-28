@@ -36,7 +36,7 @@
       "url": "https://package.openupm.com"
     },
     "com.unity.addressables": {
-      "version": "2.5.0",
+      "version": "2.6.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -61,7 +61,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.8.21",
+      "version": "1.8.23",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -71,7 +71,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
-      "version": "2.10.3",
+      "version": "2.10.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -180,7 +180,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.postprocessing": {
-      "version": "3.4.0",
+      "version": "3.5.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -189,14 +189,14 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.probuilder": {
-      "version": "6.0.5",
+      "version": "6.0.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.shadergraph": "17.0.3",
-        "com.unity.modules.imgui": "1.0.0",
+        "com.unity.settings-manager": "1.0.3",
         "com.unity.modules.physics": "1.0.0",
-        "com.unity.settings-manager": "1.0.3"
+        "com.unity.modules.imgui": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
